@@ -4,6 +4,8 @@ output: html_notebook
 ---
 
 ```{r}
+root.dir <- file.path(getwd(),"../..")
+setwd(root.dir)
 # load library to read excel files
 library(readxl)
 # read in choice assay data
