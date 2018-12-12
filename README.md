@@ -52,14 +52,10 @@ Our data is housed on Box.com, so in order to use the data in this project, it h
 
 The `Box.com` foulder is mounted in the `/home/morrowcj/mnt/` folder. Each time the computer is restarted, it needs to be remounted: `mount /home/morrowcj/mount/Box.com` `[morrowcj's Box.com external password]`. 
 
-When the folder is mounted, data can be copied with this code chunk:
+When the folder is mounted, the data folder can be updated with this code chunk:
 
 ```shell
-# copy all files in the Hilldale/Data folder into the
-  ## holstrom-resistance-study/data/ folder
-cp -r ~/mnt/Box.com/lab-resources/projects/Hilldale/Data/* data/
+rsync -urv /home/morrowcj/mnt/Box.com/lab-resources/projects/Hilldale/Data/ data/
 ```
-
-This will take a while, due to the size of the photos (**only transfer individual files after initial transfer**)
 
 To transfer individual files use `cp [target file] [destination directory/]`
