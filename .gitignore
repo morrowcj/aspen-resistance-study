@@ -10,3 +10,9 @@
 .Rdata
 .rdata
 .RDATA
+## html files (markdown output)
+*.html
+## photos
+*.jpg
+## archive files
+*.zip
