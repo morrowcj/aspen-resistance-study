@@ -1,0 +1,12 @@
+# git ignore file: provides a list of patterns not to track
+
+## R related files
+### R project files
+*.Rproj
+.Rproj.user
+### R history
+.Rhistory
+### various rdata files
+.Rdata
+.rdata
+.RDATA
