@@ -1,4 +1,4 @@
-Larva Vial ID,Wet Mass (mg),Dry Mass: Biomass (mg),Notes
+larva.calibration.id,wetmass_mg,drymass_mg,Notes
 1,45.4,5.8,
 2,53.5,7.4,
 3,97.6,12.6,

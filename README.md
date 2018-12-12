@@ -59,3 +59,7 @@ rsync -urv /home/morrowcj/mnt/Box.com/lab-resources/projects/Hilldale/Data/ data
 ```
 
 To transfer individual files use `cp [target file] [destination directory/]`
+
+### Cleaned data
+
+Cleaned data will be in .csv formats in the appropriate subdirectories of `data/`. These will be the files on which we will conduct our analyses. The raw data will be stored in `raw-data` in the appropriate subdirectories. 

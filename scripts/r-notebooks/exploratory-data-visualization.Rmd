@@ -3,24 +3,112 @@ title: "R Notebook"
 output: html_notebook
 ---
 
-```{r}
-root.dir <- file.path(getwd(),"../..")
-setwd(root.dir)
-# load library to read excel files
-library(readxl)
-# read in choice assay data
-Choice_Assay_Data <- read_excel("data/Choice_Assay/Choice_Assay_Data.xlsx")
-# read in larval calibration data
-L4_Cal <- read_excel("data/Choice_Assay/Choice_Assay_Data.xlsx",
-sheet = "L4 larval calibration")
-# rename columns for r format
-names(L4_Cal) <- c("vial.id","wet.mass.mg","dry.mass.mg","notes")
-# declare linear model for calibration (wet-dry mass)
-model <- lm(L4_Cal,formula = dry.mass.mg~wet.mass.mg)
-# plot dry~wet mass
-plot(L4_Cal$dry.mass.mg~L4_Cal$wet.mass.mg)
-# add our linear model to the plot
-abline(model)
-# summarize model (R^2)
-summary(model)
+```{r setup, include = FALSE}
+# getwd() 
+knitr::opts_knit$set(root.dir = normalizePath("../.."))  # should change the working directory to the containing dir.
+# getwd()  # returns correct. dir
+knitr::opts_knit$get("root.dir")  # returns 'Users/Me/Docs/Proj'
 ```
+
+```{bash, include=FALSE}
+bash scripts/update-data.sh
+```
+
+```{r libraries, message=TRUE, warning=TRUE, include=FALSE}
+library(ggplot2)
+# library(ggpmisc)
+```
+
+
+```{r functions}
+# function to provide linear equation from a model. 
+lm_eqtn <- function(model,x=NULL){
+  ## extract model parameters
+  incpt <- coef(model)[1]
+  slope <- coef(model)[2]
+  summ <- summary(model)
+  r.sqr <- summ$r.squared
+  adj.r.sqr <- summ$ajd.r.squared
+  
+  ## if x is not provided, print the equation as text
+  if(is.null(x)){
+    equation <- paste0("y=",round(slope,3),"*x+(",round(incpt,3),"); r^2=",round(r.sqr,4))
+    return(noquote(equation))
+  ## if x is given, calculate the predicted value
+  } else {
+    y <- as.vector((x*slope)+incpt)
+    return(y)
+  }
+}
+
+lm_eqtn(model)
+```
+
+
+```{r}
+# load data
+## read in L4 calibration data
+larv.calib.data <- read.csv("data/Choice_Assay/larval-calibration-data_L4.csv")
+## read in larval calibration data
+leaf.calib.data <- read.csv("data/Choice_Assay/leaf-calibration-data.csv")
+## read in experiment data
+choice.assay.data <- read.csv("data/Choice_Assay/leaf-and-larvae-data_long.csv")
+## redifine the class of specific columns
+choice.assay.data <- within(choice.assay.data,{
+  genet.lf <- as.factor(genet.lf)
+})
+```
+
+```{r}
+# declare linear model for larval calibration (wet-dry mass)
+larv.calib.model <- lm(larv.calib.data,formula = drymass_mg~wetmass_mg)
+
+# plot dry~wet mass
+## load ggplot2
+library(ggplot2)
+ggplot(data = larv.calib.data, aes(y = drymass_mg, x = wetmass_mg))+
+  geom_point() + #add points to the plot
+  stat_smooth(method = "lm") +  #add a trendline
+  annotate("text",label = lm_eqtn(larv.calib.model),x = 60, y = 14)
+  
+
+# summarize model (R^2)
+summary(larv.calib.model)
+```
+
+This calibration should work perfectly. 
+
+```{r}
+# calculate the estimated drymasses
+choice.assay.data$gm.init.drymass_mg <- lm_eqtn(larv.calib.model, choice.assay.data$gm.init.wetmass_mg)
+
+# visualize this new variable:
+plot(choice.assay.data$gm.init.drymass_mg~choice.assay.data$gm.init.wetmass_mg)
+```
+
+
+```{r}
+# declare linear model for leaf calibration (wet-dry mass)
+leaf.calib.model <- lm(leaf.calib.data,formula = agg.drymass_mg~agg.wetmass_mg)
+
+# plot dry~wet mass
+## load ggplot2
+library(ggplot2)
+ggplot(data = leaf.calib.data, aes(y = agg.drymass_mg, x = agg.wetmass_mg))+
+  geom_point(aes(col=group)) + #add points to the plot
+  stat_smooth(method = "lm") +  #add a trendline
+  annotate("text",label = lm_eqtn(leaf.calib.model,x=NULL),x = 650, y = 550)
+  
+
+# summarize model (R^2)
+summary(leaf.calib.model)$r.squared
+
+summary(lm(leaf.calib.data[-49,],formula = agg.drymass_mg~agg.wetmass_mg))$r.squared
+```
+
+Because there is substantial variation in drymass/wetmass, it may be best to use 1 correction factor per genotype (which is the average drymass/wetmass for 4-5 leaves per genet.)
+
+```{r update data}
+write.csv(choice.assay.data,file = "data/Choice_Assay/leaf-and-larvae-data_long_calibrated.csv")
+```
+
