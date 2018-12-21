@@ -16,3 +16,5 @@
 *.jpg
 ## archive files
 *.zip
+## quanlynx files
+*.qld
