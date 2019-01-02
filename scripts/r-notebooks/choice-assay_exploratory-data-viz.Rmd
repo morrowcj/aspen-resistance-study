@@ -1,5 +1,5 @@
 ---
-title: "R Notebook"
+title: "Choice Assay Exploratory Data Visualization"
 output: html_notebook
 ---
 
@@ -41,7 +41,7 @@ lm_eqtn <- function(model,x=NULL){
   }
 }
 
-lm_eqtn(model)
+# lm_eqtn(model)
 ```
 
 
@@ -59,7 +59,7 @@ choice.assay.data <- within(choice.assay.data,{
 })
 ```
 
-```{r}
+```{r larval calibration}
 # declare linear model for larval calibration (wet-dry mass)
 larv.calib.model <- lm(larv.calib.data,formula = drymass_mg~wetmass_mg)
 
@@ -69,6 +69,7 @@ library(ggplot2)
 ggplot(data = larv.calib.data, aes(y = drymass_mg, x = wetmass_mg))+
   geom_point() + #add points to the plot
   stat_smooth(method = "lm") +  #add a trendline
+  labs(title = "choice assay larval calibration curve")+
   annotate("text",label = lm_eqtn(larv.calib.model),x = 60, y = 14)
   
 
@@ -87,26 +88,54 @@ plot(choice.assay.data$gm.init.drymass_mg~choice.assay.data$gm.init.wetmass_mg)
 ```
 
 
-```{r}
+```{r leaf calibration}
 # declare linear model for leaf calibration (wet-dry mass)
-leaf.calib.model <- lm(leaf.calib.data,formula = agg.drymass_mg~agg.wetmass_mg)
+leaf.calib.model <- lm(leaf.calib.data,formula = agg.drymass_mg~agg.wetmass_mg + group)
 
 # plot dry~wet mass
 ## load ggplot2
 library(ggplot2)
 ggplot(data = leaf.calib.data, aes(y = agg.drymass_mg, x = agg.wetmass_mg))+
+  labs(title = "choice assay leaf calibration curve")+
   geom_point(aes(col=group)) + #add points to the plot
   stat_smooth(method = "lm") +  #add a trendline
-  annotate("text",label = lm_eqtn(leaf.calib.model,x=NULL),x = 650, y = 550)
+  annotate("text",label = lm_eqtn(leaf.calib.model,x=NULL),x = 700, y = 550)
   
 
 # summarize model (R^2)
 summary(leaf.calib.model)$r.squared
 
-summary(lm(leaf.calib.data[-49,],formula = agg.drymass_mg~agg.wetmass_mg))$r.squared
+# summary(lm(leaf.calib.data[-49,],formula = agg.drymass_mg~agg.wetmass_mg))$r.squared
 ```
 
-Because there is substantial variation in drymass/wetmass, it may be best to use 1 correction factor per genotype (which is the average drymass/wetmass for 4-5 leaves per genet.)
+Because there is substantial variation in drymass/wetmass, I decided to look at the coeficients separated by group:
+
+```{r leaf cal. by group}
+anova(leaf.calib.model)
+
+## look at the model coefficients by group
+library(data.table) # data table library allows the following
+dat.tab <- data.table(leaf.calib.data)
+coef.tab <- dat.tab[,list(intcpt = coef(lm(agg.drymass_mg ~ agg.wetmass_mg))[1],
+                          slope = coef(lm(agg.drymass_mg ~ agg.wetmass_mg))[2],
+                          r.sqr = summary(lm(agg.drymass_mg ~ agg.wetmass_mg))$r.squared),
+              by = group]
+
+coef.tab
+
+ggplot(data = leaf.calib.data, 
+       aes(y = agg.drymass_mg, 
+           x = agg.wetmass_mg, 
+           group = group)) +
+  geom_point(aes(col = group)) + #add points to the plot
+  stat_smooth(method = "lm", aes(col = group)) #add a trendline
+  
+```
+
+There seems to be a significant effect of group on water loss.
+
+The r-squared values are a bit better this way, but it still may be best to use 1 correction factor per genotype (which is the average drymass/wetmass for 4-5 leaves per genet.)
+
 
 ```{r update data}
 write.csv(choice.assay.data,file = "data/Choice_Assay/leaf-and-larvae-data_long_calibrated.csv")
