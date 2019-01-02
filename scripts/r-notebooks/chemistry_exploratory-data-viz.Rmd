@@ -1,0 +1,20 @@
+---
+title: "Chemistry Data Visualization"
+output: html_notebook
+---
+
+```{r setup, include = FALSE}
+# getwd() 
+knitr::opts_knit$set(root.dir = normalizePath("../.."))  # should change the working directory to the containing dir.
+getwd()  # returns correct. dir
+knitr::opts_knit$get("root.dir")  # returns 'Users/Me/Docs/Proj'
+```
+
+```{bash, include=FALSE}
+bash scripts/update-data.sh
+```
+
+```{r}
+chem.data <- read.csv(file = "data/uplc_output/Hol18_BATCH1-6_Master_CJM_21Dec2018_reduced.csv")
+```
+
