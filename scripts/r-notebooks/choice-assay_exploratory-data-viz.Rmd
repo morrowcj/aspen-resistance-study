@@ -16,6 +16,7 @@ bash scripts/update-data.sh
 
 ```{r libraries, message=TRUE, warning=TRUE, include=FALSE}
 library(ggplot2)
+library(dplyr)
 # library(ggpmisc)
 ```
 
@@ -57,6 +58,11 @@ choice.assay.data <- read.csv("data/Choice_Assay/leaf-and-larvae-data_long.csv")
 choice.assay.data <- within(choice.assay.data,{
   genet.lf <- as.factor(genet.lf)
 })
+leaf.calib.data <- within(leaf.calib.data,{
+  Genet <- as.factor(Genet)
+  group <- as.factor(group)
+})
+
 ```
 
 ```{r larval calibration}
@@ -99,7 +105,7 @@ ggplot(data = leaf.calib.data, aes(y = agg.drymass_mg, x = agg.wetmass_mg))+
   labs(title = "choice assay leaf calibration curve")+
   geom_point(aes(col=group)) + #add points to the plot
   stat_smooth(method = "lm") +  #add a trendline
-  annotate("text",label = lm_eqtn(leaf.calib.model,x=NULL),x = 700, y = 550)
+  annotate("text",label = lm_eqtn(leaf.calib.model,x=NULL),x = 750, y = 550)
   
 
 # summarize model (R^2)
@@ -121,12 +127,17 @@ coef.tab <- dat.tab[,list(intcpt = coef(lm(agg.drymass_mg ~ agg.wetmass_mg))[1],
                           r.sqr = summary(lm(agg.drymass_mg ~ agg.wetmass_mg))$r.squared),
               by = group]
 
-coef.tab
+within(coef.tab,{
+  r.sqr <-  round(r.sqr,4)
+  slope <-  round(slope,4)
+  intcpt <-  round(intcpt,4)
+})
 
 ggplot(data = leaf.calib.data, 
        aes(y = agg.drymass_mg, 
            x = agg.wetmass_mg, 
            group = group)) +
+  labs(title = "Wet-dry leaf calibration model",xlab = "aggregate wet mass (mg)", ylab = "aggregate dry mass (mg)") +     
   geom_point(aes(col = group)) + #add points to the plot
   stat_smooth(method = "lm", aes(col = group)) #add a trendline
   
@@ -135,6 +146,103 @@ ggplot(data = leaf.calib.data,
 There seems to be a significant effect of group on water loss.
 
 The r-squared values are a bit better this way, but it still may be best to use 1 correction factor per genotype (which is the average drymass/wetmass for 4-5 leaves per genet.)
+
+```{r genet key}
+leaf.cal_lookup.tab <- leaf.calib.data %>% select(Genet,group,biomass.proportion_dry.div.wet) %>% group_by(Genet,group) %>% summarise(mean.biomass.prop=mean(biomass.proportion_dry.div.wet,na.rm = TRUE))
+
+head(leaf.cal_lookup.tab)
+```
+
+```{r}
+# merge the lookup table into the choice assay data
+choice.assay.data <- merge(choice.assay.data,leaf.cal_lookup.tab,by.x = "genet.lf",by.y = "Genet",all.x = TRUE)
+
+# add in coeficients from grouped model
+choice.assay.data <- merge(choice.assay.data,coef.tab,by = "group",all.x = TRUE)
+```
+
+```{r}
+# calculate initial drymass
+
+## full model
+choice.assay.data$lf.init.drymass_no.calib_mg <- lm_eqtn(model = leaf.calib.model, choice.assay.data$lf.init.wetmass_mg)
+
+dif0 <- choice.assay.data$lf.init.drymass_no.calib_mg - choice.assay.data$lf.end.drymass_mg
+
+prop0 <- length(which(dif0<0))/length(dif0)
+
+summary(dif0)
+
+## Genet method
+choice.assay.data$lf.init.drymass_genet.calib_mg <- choice.assay.data$mean.biomass.prop*choice.assay.data$lf.init.wetmass_mg
+
+dif1 <- choice.assay.data$lf.init.drymass_genet.calib_mg - choice.assay.data$lf.end.drymass_mg
+
+prop1 <- length(which(dif1<0))/length(dif1)
+
+summary(dif1)
+
+# group method
+choice.assay.data$lf.init.drymass_group.calib_mg <- (choice.assay.data$lf.init.wetmass_mg*choice.assay.data$slope)+choice.assay.data$intcpt
+
+dif2 <- choice.assay.data$lf.init.drymass_group.calib_mg - choice.assay.data$lf.end.drymass_mg
+
+prop2 <- length(which(dif2<0))/length(dif2)
+
+summary(dif2)
+
+boxplot(dif0,dif1,dif2,names = c("linear","genet","grouped linear"),main = "Estimated Leaf Biomass Consumed \n by calibration method",ylab = "leaf biomass lost (mg)",xlab = "calibration type")
+abline(h = 0, col = "grey", lty = 2)
+
+# boxplot(choice.assay.data$lf.init.drymass_genet.calib_mg,choice.assay.data$lf.init.drymass_group.calib_mg,names = c("genet calibration","group calibration"),main = "Estimated Initial Leaf Biomass (by calibration method)",ylab = "leaf biomass (mg)")
+```
+
+When we compare initial mass to final mass, Observation 8 is a serious outlier (this is true no matter which calibration you use):
+
+```{r}
+model <- lm(choice.assay.data$lf.end.drymass_mg ~ choice.assay.data$lf.init.drymass_group.calib_mg)
+
+
+library(car)
+outlr.test <- outlierTest(model,n.max = Inf)
+outlr.test
+# list of outliers (as rows of original dataset)
+outliers <- as.numeric(names(outlr.test[[1]]))
+
+# Show the biomass difference
+cat("biomass consumed =", with(choice.assay.data[outliers,], {lf.init.drymass_group.calib_mg - lf.end.drymass_mg}),"mg\n")
+```
+
+This anamoly is likely due to a recording error in the leaf's mass. I will test to see the effect of removing the observations:
+
+```{r}
+# nrow(choice.assay.data)
+# choice.assay.data[c(8,9),]
+
+model <- lm(choice.assay.data$lf.end.drymass_mg ~ choice.assay.data$lf.init.drymass_group.calib_mg + choice.assay.data$group + choice.assay.data$gm.init.drymass_mg)
+
+cat("original r-squared:\n")
+summary(model)$r.squared
+
+plot(choice.assay.data$lf.end.drymass_mg ~ choice.assay.data$lf.init.drymass_group.calib_mg)
+suppressWarnings(abline(model))
+abline(c(0,1),col = "red")
+
+## reove outliers
+choice.assay.data2 <- choice.assay.data[c(-outliers),]
+
+# nrow(choice.assay.data2)
+
+model2 <- lm(choice.assay.data2$lf.end.drymass_mg ~ choice.assay.data2$lf.init.drymass_group.calib_mg + choice.assay.data2$group + choice.assay.data2$gm.init.drymass_mg)
+
+cat("new r-squared:\n")
+summary(model2)$r.squared
+
+plot(choice.assay.data2$lf.end.drymass_mg ~ choice.assay.data2$lf.init.drymass_group.calib_mg)
+suppressWarnings(abline(model2))
+abline(c(0,1),col = "red")
+
+```
 
 
 ```{r update data}

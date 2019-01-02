@@ -15,6 +15,6 @@ bash scripts/update-data.sh
 ```
 
 ```{r}
-chem.data <- read.csv(file = "data/uplc_output/Hol18_BATCH1-6_Master_CJM_21Dec2018_reduced.csv")
+chem.data <- read.csv(file = "data/uplc_output/Hol18_BATCH1-6_Master_CJM_02Jan2019_reduced.csv")
 ```
 
