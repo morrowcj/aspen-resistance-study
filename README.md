@@ -15,6 +15,20 @@ Codename:	xenial
 
 # Setup
 
+## Cloning and updating the project
+
+This project is located on my github page: https://github.com/morrowcj/aspen-resistance-study/
+To make a copy execute the following code in a git-enabled terminal:
+
+```shell
+git clone git@github.com:morrowcj/aspen-resistance-study.git [destination path]
+```
+
+To update the project, execute a `git pull` command from within the project folder.
+For more information on git: https://guides.github.com/introduction/git-handbook/
+
+## Other setup
+
 All code in this document should be run from the project root directory unless otherwise specified. To ensure that your terminal starts in the proper working directory, locate the directory and move into it:
 
 ```shell
@@ -40,7 +54,7 @@ cd /home/morrowcj/Documents/holstrom-resistance-study/
 
 Phenotypic, plot layout, and identification data for WisAsp will be useful to our analyses. These data are located on the L drive (`"/labstorage/Lindroth_Lab/WisAsp Study/Phenotype data summary table"`). 
 
-Find the most recent verision of the phenotype table and copy it to our project's data directory:
+Find the most recent verision of the phenotype table and copy it to our project's data directory: **Note** most data will be updated and stored on github
 
 ```shell
 cp "/labstorage/Lindroth_Lab/WisAsp Study/Phenotype data summary table/WisAsp Summary Table DRAFT 6 Dec 2018.xlsx" ~/Documents/holstrom-resistance-study/data/
