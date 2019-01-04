@@ -327,6 +327,125 @@ abline(c(0,1),col = "red")
 
 There seems to be a strong effect of removing the potential outlier, which may justify removing the observation from the analysis.
 
+#### No molting
+
+First, I want to make sure that there isn't any obvious reason for a decrease in area.
+
+```{r compare without molting}
+data.reduced <- choice.assay.data[choice.assay.data$molting_bin<1,]
+
+data.reduced$leaf.mass.consumed <- dif.red <- (data.reduced$lf.init.drymass_group.calib_mg - data.reduced$lf.end.drymass_mg)
+
+prop.red <- length(which(dif.red < 0))/length(dif.red)
+
+gen.dif.red <- (data.reduced$lf.init.drymass_genet.calib_mg - data.reduced$lf.end.drymass_mg)
+
+prop.genet.red <- length(which(gen.dif.red < 0))/length(gen.dif.red)
+
+boxplot(dif0,dif1,dif2,dif.red,gen.dif.red,names = c("linear","genet","grouped\n linear", "no.molt\ngrouped","no.molt\n genet"),main = "Estimated Leaf Biomass Consumed \n by calibration method",ylab = "leaf biomass lost (mg)",xlab = "calibration type")
+abline(h = 0, col = "grey", lty = 2)
+```
+
+```{r no molting prop}
+round(cbind("linear" = prop0, "genet" = prop1, "grp.lin" = prop2, prop.red, prop.genet.red),digits = 4)
+```
+
+```{r prop. of molting}
+length(which(choice.assay.data$molting_bin==1))/nrow(choice.assay.data)
+```
+
+## Visualization
+
+```{r leaves per dish}
+leaves <- data.reduced %>% group_by(Dish.ID) %>% summarise("leaves" = length(genet.lf))
+
+data.reduced <- merge(data.reduced,leaves,by = "Dish.ID")
+```
+
+Here I'll add in the treatment group which is the combination of all groups
+present in one dish.
+
+```{r treatment group}
+# create the empty key
+treatment.key <- data.frame("Dish.ID" = data.reduced$Dish.ID, "treatment" = NA)
+# loop over all dishes and extract the groups present
+for (ID in data.reduced$Dish.ID){
+  trts <- unique(data.reduced$group[which(data.reduced$Dish.ID == ID)])
+  trts <- sort(trts)
+  ## paste the dishes groups together into one string
+  treatment <- paste(trts, collapse = ".")
+  ## at the treatment string to the key
+  treatment.key$treatment[which(treatment.key$Dish.ID == ID)] <- treatment
+}
+
+## check that there are only 4 treatments
+stopifnot(length(unique(treatment.key$treatment))==4)
+## if the IDs aren't equal, stop.
+stopifnot(all.equal(treatment.key$Dish.ID,data.reduced$Dish.ID))
+## same for number of observations
+stopifnot(nrow(treatment.key) == nrow(data.reduced))
+
+match.index <- match(x = treatment.key$Dish.ID, table = data.reduced$Dish.ID)
+
+data.reduced$treatment <- factor(treatment.key$treatment,levels = unique(treatment.key$treatment))
+
+data.reduced %>% nrow()
+
+## show that it worked:
+data.reduced[data.reduced$Dish.ID %in% data.reduced$Dish.ID[c(1,5,31,80)],] %>% select(Dish.ID, group, treatment)
+
+## treatment composition table
+(treatment.n <- data.reduced %>% group_by(treatment) %>% summarise(n = length(Dish.ID)))
+```
+
+### Plots
+
+Let's see how our treatments influenced consumption:
+
+```{r plot the groups}
+ggplot(data = data.reduced, aes(x = jitter(as.numeric(treatment)), y = leaf.mass.consumed, fill = group)) +
+  geom_point(aes(col = group)) + labs(title = "leaf biomass consumed by treatment", y = "biomass consumed")
+
+## summarize the grouped data by mean 
+plot.table <- data.reduced %>% group_by(treatment, group) %>% summarize(mean.consumed = mean(leaf.mass.consumed), sd.consumed = sd(leaf.mass.consumed))
+
+
+(gp <- ggplot(data = plot.table, aes(x = treatment, y = mean.consumed, fill = group)) +
+  geom_bar(stat = "identity", position = "dodge", col = "black")+
+    labs(title = "leaf biomass consumed by treatment", y = "biomass consumed")
+  )
+  
+  
+gp +geom_errorbar(aes(ymin = mean.consumed - sd.consumed,
+                    ymax = mean.consumed + sd.consumed),
+                width = .2,
+                position = position_dodge(.9))
+```
+
+There is a potential outlier according to the first graph above.
+
+```{r}
+potential.outlier <- which(data.reduced$leaf.mass.consumed > 100)
+
+data.reduced[potential.outlier,]
+```
+
+```{r}
+triplets.filtered <- data.reduced %>% filter(leaf.mass.consumed <= 100, treatment == "fast.med.slow")
+
+triplets.means <- triplets.filtered %>% group_by(group) %>% 
+  summarise(mean.consumed = mean(leaf.mass.consumed), sd.consumed = sd(leaf.mass.consumed))
+
+ggplot(data = triplets.means, aes(y = mean.consumed, x = group)) +
+  geom_bar(aes(fill = group), stat = "identity", position = "dodge") + 
+    labs(title = "leaf biomass consumed by treatment", subtitle = "(choice of all 3)", y = "biomass consumed") +
+  geom_errorbar(aes(ymin = mean.consumed - sd.consumed,
+                    ymax = mean.consumed + sd.consumed),
+                width = .2,
+                position = position_dodge(.9))
+```
+
+
 ```{r update data}
 write.csv(choice.assay.data,file = "data/Choice_Assay/leaf-and-larvae-data_long_calibrated.csv")
 ```
