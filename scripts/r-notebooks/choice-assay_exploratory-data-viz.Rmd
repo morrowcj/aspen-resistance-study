@@ -3,6 +3,12 @@ title: "Choice Assay Exploratory Data Visualization"
 output: html_notebook
 ---
 
+# Intro
+
+This document is where I will conduct preliminary data visualization and analysis for the choice assay experiment.
+
+# Setup
+
 ```{r setup, include = FALSE}
 # getwd() 
 knitr::opts_knit$set(root.dir = normalizePath("../.."))  # should change the working directory to the containing dir.
@@ -11,15 +17,19 @@ knitr::opts_knit$get("root.dir")  # returns 'Users/Me/Docs/Proj'
 ```
 
 ```{bash, include=FALSE}
-bash scripts/update-data.sh
+#bash scripts/update-data.sh
 ```
+
+load R libraries:
 
 ```{r libraries, message=TRUE, warning=TRUE, include=FALSE}
 library(ggplot2)
 library(dplyr)
-# library(ggpmisc)
+library(data.table)
+library(car)
 ```
 
+Define functions:
 
 ```{r functions}
 # function to provide linear equation from a model. 
@@ -45,8 +55,11 @@ lm_eqtn <- function(model,x=NULL){
 # lm_eqtn(model)
 ```
 
+# Data exploration
 
-```{r}
+load in the data:
+
+```{r load data}
 # load data
 ## read in L4 calibration data
 larv.calib.data <- read.csv("data/Choice_Assay/larval-calibration-data_L4.csv")
@@ -65,13 +78,15 @@ leaf.calib.data <- within(leaf.calib.data,{
 
 ```
 
-```{r larval calibration}
+## Larval Calibration
+
+define larval calibration model:
+
+```{r larval calibration model}
 # declare linear model for larval calibration (wet-dry mass)
 larv.calib.model <- lm(larv.calib.data,formula = drymass_mg~wetmass_mg)
 
 # plot dry~wet mass
-## load ggplot2
-library(ggplot2)
 ggplot(data = larv.calib.data, aes(y = drymass_mg, x = wetmass_mg))+
   geom_point() + #add points to the plot
   stat_smooth(method = "lm") +  #add a trendline
@@ -83,9 +98,11 @@ ggplot(data = larv.calib.data, aes(y = drymass_mg, x = wetmass_mg))+
 summary(larv.calib.model)
 ```
 
-This calibration should work perfectly. 
+This calibration should work perfectly. The line fits the data well.
 
-```{r}
+Calculate larval drymass:
+
+```{r calculate larval drymass}
 # calculate the estimated drymasses
 choice.assay.data$gm.init.drymass_mg <- lm_eqtn(larv.calib.model, choice.assay.data$gm.init.wetmass_mg)
 
@@ -93,34 +110,38 @@ choice.assay.data$gm.init.drymass_mg <- lm_eqtn(larv.calib.model, choice.assay.d
 plot(choice.assay.data$gm.init.drymass_mg~choice.assay.data$gm.init.wetmass_mg)
 ```
 
+## Leaf Calibration
 
-```{r leaf calibration}
+### Linear cal. method
+
+First, we'll try the linear calibration model for leaf wet-dry mass:
+
+```{r leaf cal. linear}
 # declare linear model for leaf calibration (wet-dry mass)
 leaf.calib.model <- lm(leaf.calib.data,formula = agg.drymass_mg~agg.wetmass_mg + group)
 
 # plot dry~wet mass
-## load ggplot2
-library(ggplot2)
 ggplot(data = leaf.calib.data, aes(y = agg.drymass_mg, x = agg.wetmass_mg))+
   labs(title = "choice assay leaf calibration curve")+
   geom_point(aes(col=group)) + #add points to the plot
   stat_smooth(method = "lm") +  #add a trendline
   annotate("text",label = lm_eqtn(leaf.calib.model,x=NULL),x = 750, y = 550)
   
-
 # summarize model (R^2)
 summary(leaf.calib.model)$r.squared
 
 # summary(lm(leaf.calib.data[-49,],formula = agg.drymass_mg~agg.wetmass_mg))$r.squared
 ```
 
-Because there is substantial variation in drymass/wetmass, I decided to look at the coeficients separated by group:
+Because there is substantial variation in drymass/wetmass, I decided to look at the coeficients separated by growth category (group):
+
+### Grouped cal. method
 
 ```{r leaf cal. by group}
 anova(leaf.calib.model)
 
 ## look at the model coefficients by group
-library(data.table) # data table library allows the following
+  ## library(data.table) allows the following
 dat.tab <- data.table(leaf.calib.data)
 coef.tab <- dat.tab[,list(intcpt = coef(lm(agg.drymass_mg ~ agg.wetmass_mg))[1],
                           slope = coef(lm(agg.drymass_mg ~ agg.wetmass_mg))[2],
@@ -143,17 +164,56 @@ ggplot(data = leaf.calib.data,
   
 ```
 
+
 There seems to be a significant effect of group on water loss.
 
-The r-squared values are a bit better this way, but it still may be best to use 1 correction factor per genotype (which is the average drymass/wetmass for 4-5 leaves per genet.)
+#### Outlier testing
 
-```{r genet key}
+There may be an outlier in the calibration data:
+
+```{r leaf cal. by group no outliers, include=TRUE}
+cal.outliers <- as.numeric(names(outlierTest(leaf.calib.model)[[1]]))
+
+leaf.calib.model2 <- lm(leaf.calib.data[-cal.outliers],formula = agg.drymass_mg~agg.wetmass_mg + group)
+
+anova(leaf.calib.model2)
+
+## look at the model coefficients by group
+dat.tab2 <- data.table(leaf.calib.data[-cal.outliers,])
+coef.tab2 <- dat.tab2[,list(intcpt = coef(lm(agg.drymass_mg ~ agg.wetmass_mg))[1],
+                          slope = coef(lm(agg.drymass_mg ~ agg.wetmass_mg))[2],
+                          r.sqr = summary(lm(agg.drymass_mg ~ agg.wetmass_mg))$r.squared),
+              by = group]
+
+within(coef.tab2,{
+  r.sqr <-  round(r.sqr,4)
+  slope <-  round(slope,4)
+  intcpt <-  round(intcpt,4)
+})
+
+ggplot(data = leaf.calib.data[-cal.outliers,], 
+       aes(y = agg.drymass_mg, 
+           x = agg.wetmass_mg, 
+           group = group)) +
+  labs(title = "Wet-dry leaf calibration model",xlab = "aggregate wet mass (mg)", ylab = "aggregate dry mass (mg)") +     
+  geom_point(aes(col = group)) + #add points to the plot
+  stat_smooth(method = "lm", aes(col = group)) #add a trendline
+  
+```
+
+Removing the potential outlier does not affect the curve enough to justify removing it. The full calibration data should be used.
+
+The r-squared values are a bit better when grouped linear models are used over the traditional linear model, but it still may be best to use 1 correction factor per genotype (which is the average drymass/wetmass for 4-5 leaves per genet.)
+
+```{r genet cal. key}
 leaf.cal_lookup.tab <- leaf.calib.data %>% select(Genet,group,biomass.proportion_dry.div.wet) %>% group_by(Genet,group) %>% summarise(mean.biomass.prop=mean(biomass.proportion_dry.div.wet,na.rm = TRUE))
 
 head(leaf.cal_lookup.tab)
 ```
 
-```{r}
+Here we merge in those genet-based calibration values:
+
+```{r merge group cal. key}
 # merge the lookup table into the choice assay data
 choice.assay.data <- merge(choice.assay.data,leaf.cal_lookup.tab,by.x = "genet.lf",by.y = "Genet",all.x = TRUE)
 
@@ -161,7 +221,11 @@ choice.assay.data <- merge(choice.assay.data,leaf.cal_lookup.tab,by.x = "genet.l
 choice.assay.data <- merge(choice.assay.data,coef.tab,by = "group",all.x = TRUE)
 ```
 
-```{r}
+Next I will estimate the initial dry mass according to the various calibration methods and then compare them:
+
+### Calculate leaf drymass estimates
+
+```{r initial dry mass calc.}
 # calculate initial drymass
 
 ## full model
@@ -197,25 +261,34 @@ abline(h = 0, col = "grey", lty = 2)
 # boxplot(choice.assay.data$lf.init.drymass_genet.calib_mg,choice.assay.data$lf.init.drymass_group.calib_mg,names = c("genet calibration","group calibration"),main = "Estimated Initial Leaf Biomass (by calibration method)",ylab = "leaf biomass (mg)")
 ```
 
-When we compare initial mass to final mass, Observation 8 is a serious outlier (this is true no matter which calibration you use):
+The comparison shows that both linear methods estimate fewer observations with "leaf biomass lost" < 0.
+Additionally, the grouped linear method estimates even less negative valuse than the original linear model: 
 
-```{r}
+```{r prop. of obs. with neg. biomass lost}
+round(cbind("linear" = prop0, "genet" = prop1, "grp.lin" = prop2),digits = 4)
+```
+
+#### Outlier test:
+
+```{r lf. cal. outlier tests}
 model <- lm(choice.assay.data$lf.end.drymass_mg ~ choice.assay.data$lf.init.drymass_group.calib_mg)
 
 
-library(car)
+## from the 'car' package:
 outlr.test <- outlierTest(model,n.max = Inf)
 outlr.test
 # list of outliers (as rows of original dataset)
 outliers <- as.numeric(names(outlr.test[[1]]))
 
 # Show the biomass difference
-cat("biomass consumed =", with(choice.assay.data[outliers,], {lf.init.drymass_group.calib_mg - lf.end.drymass_mg}),"mg\n")
+outlier.val <- round(with(choice.assay.data[outliers,], {lf.init.drymass_group.calib_mg - lf.end.drymass_mg}),digits = 2)
 ```
+
+When we compare initial mass to final mass, Observation(s) `outliers` is a serious outlier (this is true no matter which calibration you use). When using the grouped calibration, the estimated leaf area consumed is `outlier.val`
 
 This anamoly is likely due to a recording error in the leaf's mass. I will test to see the effect of removing the observations:
 
-```{r}
+```{r outlier effect}
 # nrow(choice.assay.data)
 # choice.assay.data[c(8,9),]
 
@@ -224,7 +297,11 @@ model <- lm(choice.assay.data$lf.end.drymass_mg ~ choice.assay.data$lf.init.drym
 cat("original r-squared:\n")
 summary(model)$r.squared
 
-plot(choice.assay.data$lf.end.drymass_mg ~ choice.assay.data$lf.init.drymass_group.calib_mg)
+plot(choice.assay.data$lf.end.drymass_mg ~ choice.assay.data$lf.init.drymass_group.calib_mg,
+     xlab = "initial leaf drymass (mg)",
+     ylab = "final leaf drymass (mg)",
+     main = "full data"
+     )
 suppressWarnings(abline(model))
 abline(c(0,1),col = "red")
 
@@ -238,12 +315,17 @@ model2 <- lm(choice.assay.data2$lf.end.drymass_mg ~ choice.assay.data2$lf.init.d
 cat("new r-squared:\n")
 summary(model2)$r.squared
 
-plot(choice.assay.data2$lf.end.drymass_mg ~ choice.assay.data2$lf.init.drymass_group.calib_mg)
+plot(choice.assay.data2$lf.end.drymass_mg ~ choice.assay.data2$lf.init.drymass_group.calib_mg,
+     xlab = "initial leaf drymass (mg)",
+     ylab = "final leaf drymass (mg)",
+     main = "without outlier"
+     )
 suppressWarnings(abline(model2))
 abline(c(0,1),col = "red")
 
 ```
 
+There seems to be a strong effect of removing the potential outlier, which may justify removing the observation from the analysis.
 
 ```{r update data}
 write.csv(choice.assay.data,file = "data/Choice_Assay/leaf-and-larvae-data_long_calibrated.csv")
