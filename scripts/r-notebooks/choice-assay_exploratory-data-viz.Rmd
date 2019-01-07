@@ -1,6 +1,10 @@
 ---
 title: "Choice Assay Exploratory Data Visualization"
-output: html_notebook
+output:
+  html_document:
+    df_print: paged
+    toc_float: "yes"
+    code_folding: "hide"
 ---
 
 # Intro
@@ -95,7 +99,7 @@ ggplot(data = larv.calib.data, aes(y = drymass_mg, x = wetmass_mg))+
   
 
 # summarize model (R^2)
-summary(larv.calib.model)
+# summary(larv.calib.model)$r.squared
 ```
 
 This calibration should work perfectly. The line fits the data well.
@@ -107,7 +111,7 @@ Calculate larval drymass:
 choice.assay.data$gm.init.drymass_mg <- lm_eqtn(larv.calib.model, choice.assay.data$gm.init.wetmass_mg)
 
 # visualize this new variable:
-plot(choice.assay.data$gm.init.drymass_mg~choice.assay.data$gm.init.wetmass_mg)
+# plot(choice.assay.data$gm.init.drymass_mg~choice.assay.data$gm.init.wetmass_mg)
 ```
 
 ## Leaf Calibration
@@ -138,6 +142,7 @@ Because there is substantial variation in drymass/wetmass, I decided to look at 
 ### Grouped cal. method
 
 ```{r leaf cal. by group}
+cat("anova table:\n")
 anova(leaf.calib.model)
 
 ## look at the model coefficients by group
@@ -148,12 +153,6 @@ coef.tab <- dat.tab[,list(intcpt = coef(lm(agg.drymass_mg ~ agg.wetmass_mg))[1],
                           r.sqr = summary(lm(agg.drymass_mg ~ agg.wetmass_mg))$r.squared),
               by = group]
 
-within(coef.tab,{
-  r.sqr <-  round(r.sqr,4)
-  slope <-  round(slope,4)
-  intcpt <-  round(intcpt,4)
-})
-
 ggplot(data = leaf.calib.data, 
        aes(y = agg.drymass_mg, 
            x = agg.wetmass_mg, 
@@ -161,6 +160,13 @@ ggplot(data = leaf.calib.data,
   labs(title = "Wet-dry leaf calibration model",xlab = "aggregate wet mass (mg)", ylab = "aggregate dry mass (mg)") +     
   geom_point(aes(col = group)) + #add points to the plot
   stat_smooth(method = "lm", aes(col = group)) #add a trendline
+
+cat("linear model parameters by group:\n")
+within(coef.tab,{
+  r.sqr <-  round(r.sqr,4)
+  slope <-  round(slope,4)
+  intcpt <-  round(intcpt,4)
+})
   
 ```
 
@@ -172,10 +178,13 @@ There seems to be a significant effect of group on water loss.
 There may be an outlier in the calibration data:
 
 ```{r leaf cal. by group no outliers, include=TRUE}
+cat("outlier test:\n")
+outlierTest(leaf.calib.model)
 cal.outliers <- as.numeric(names(outlierTest(leaf.calib.model)[[1]]))
 
 leaf.calib.model2 <- lm(leaf.calib.data[-cal.outliers],formula = agg.drymass_mg~agg.wetmass_mg + group)
 
+cat("anova of model without outlier:\n")
 anova(leaf.calib.model2)
 
 ## look at the model coefficients by group
@@ -185,12 +194,6 @@ coef.tab2 <- dat.tab2[,list(intcpt = coef(lm(agg.drymass_mg ~ agg.wetmass_mg))[1
                           r.sqr = summary(lm(agg.drymass_mg ~ agg.wetmass_mg))$r.squared),
               by = group]
 
-within(coef.tab2,{
-  r.sqr <-  round(r.sqr,4)
-  slope <-  round(slope,4)
-  intcpt <-  round(intcpt,4)
-})
-
 ggplot(data = leaf.calib.data[-cal.outliers,], 
        aes(y = agg.drymass_mg, 
            x = agg.wetmass_mg, 
@@ -198,7 +201,15 @@ ggplot(data = leaf.calib.data[-cal.outliers,],
   labs(title = "Wet-dry leaf calibration model",xlab = "aggregate wet mass (mg)", ylab = "aggregate dry mass (mg)") +     
   geom_point(aes(col = group)) + #add points to the plot
   stat_smooth(method = "lm", aes(col = group)) #add a trendline
-  
+
+
+cat("grouped model parameters (outlier removed):\n")
+within(coef.tab2,{
+  r.sqr <-  round(r.sqr,4)
+  slope <-  round(slope,4)
+  intcpt <-  round(intcpt,4)
+})
+
 ```
 
 Removing the potential outlier does not affect the curve enough to justify removing it. The full calibration data should be used.
@@ -208,6 +219,7 @@ The r-squared values are a bit better when grouped linear models are used over t
 ```{r genet cal. key}
 leaf.cal_lookup.tab <- leaf.calib.data %>% select(Genet,group,biomass.proportion_dry.div.wet) %>% group_by(Genet,group) %>% summarise(mean.biomass.prop=mean(biomass.proportion_dry.div.wet,na.rm = TRUE))
 
+cat("subset of genet calibration table:\n")
 head(leaf.cal_lookup.tab)
 ```
 
@@ -231,34 +243,41 @@ Next I will estimate the initial dry mass according to the various calibration m
 ## full model
 choice.assay.data$lf.init.drymass_no.calib_mg <- lm_eqtn(model = leaf.calib.model, choice.assay.data$lf.init.wetmass_mg)
 
-dif0 <- choice.assay.data$lf.init.drymass_no.calib_mg - choice.assay.data$lf.end.drymass_mg
+choice.assay.data$bmass.consumed_no.cal <-  dif0 <- choice.assay.data$lf.init.drymass_no.calib_mg - choice.assay.data$lf.end.drymass_mg
 
 prop0 <- length(which(dif0<0))/length(dif0)
-
-summary(dif0)
 
 ## Genet method
 choice.assay.data$lf.init.drymass_genet.calib_mg <- choice.assay.data$mean.biomass.prop*choice.assay.data$lf.init.wetmass_mg
 
-dif1 <- choice.assay.data$lf.init.drymass_genet.calib_mg - choice.assay.data$lf.end.drymass_mg
+choice.assay.data$bmass.consumed_genet.cal <- dif1 <- choice.assay.data$lf.init.drymass_genet.calib_mg - choice.assay.data$lf.end.drymass_mg
 
 prop1 <- length(which(dif1<0))/length(dif1)
-
-summary(dif1)
 
 # group method
 choice.assay.data$lf.init.drymass_group.calib_mg <- (choice.assay.data$lf.init.wetmass_mg*choice.assay.data$slope)+choice.assay.data$intcpt
 
-dif2 <- choice.assay.data$lf.init.drymass_group.calib_mg - choice.assay.data$lf.end.drymass_mg
+choice.assay.data$bmass.consumed_group.cal <- dif2 <- choice.assay.data$lf.init.drymass_group.calib_mg - choice.assay.data$lf.end.drymass_mg
 
 prop2 <- length(which(dif2<0))/length(dif2)
 
-summary(dif2)
+# Print a plot:
 
 boxplot(dif0,dif1,dif2,names = c("linear","genet","grouped linear"),main = "Estimated Leaf Biomass Consumed \n by calibration method",ylab = "leaf biomass lost (mg)",xlab = "calibration type")
 abline(h = 0, col = "grey", lty = 2)
 
-# boxplot(choice.assay.data$lf.init.drymass_genet.calib_mg,choice.assay.data$lf.init.drymass_group.calib_mg,names = c("genet calibration","group calibration"),main = "Estimated Initial Leaf Biomass (by calibration method)",ylab = "leaf biomass (mg)")
+
+# Print results:
+
+cat("boxplot stats (full linear model):\n")
+summary(dif0)
+
+cat("boxplot stats (genet calibration):\n")
+summary(dif1)
+
+cat("boxplot stats (grouped linear model):\n")
+summary(dif2)
+
 ```
 
 The comparison shows that both linear methods estimate fewer observations with "leaf biomass lost" < 0.
@@ -268,66 +287,41 @@ Additionally, the grouped linear method estimates even less negative valuse than
 round(cbind("linear" = prop0, "genet" = prop1, "grp.lin" = prop2),digits = 4)
 ```
 
-#### Outlier test:
+#### Standardize some metrics by initial larval biomass
 
-```{r lf. cal. outlier tests}
-model <- lm(choice.assay.data$lf.end.drymass_mg ~ choice.assay.data$lf.init.drymass_group.calib_mg)
+```{r linear model from data}
+model <- with(choice.assay.data,{
+  lm(lf.end.drymass_mg ~ lf.init.drymass_group.calib_mg + group + gm.init.drymass_mg)
+  })
 
-
-## from the 'car' package:
-outlr.test <- outlierTest(model,n.max = Inf)
-outlr.test
-# list of outliers (as rows of original dataset)
-outliers <- as.numeric(names(outlr.test[[1]]))
-
-# Show the biomass difference
-outlier.val <- round(with(choice.assay.data[outliers,], {lf.init.drymass_group.calib_mg - lf.end.drymass_mg}),digits = 2)
+cat("anova table:\n")
+anova(model)
 ```
 
-When we compare initial mass to final mass, Observation(s) `outliers` is a serious outlier (this is true no matter which calibration you use). When using the grouped calibration, the estimated leaf area consumed is `outlier.val`
 
-This anamoly is likely due to a recording error in the leaf's mass. I will test to see the effect of removing the observations:
-
-```{r outlier effect}
-# nrow(choice.assay.data)
-# choice.assay.data[c(8,9),]
-
-model <- lm(choice.assay.data$lf.end.drymass_mg ~ choice.assay.data$lf.init.drymass_group.calib_mg + choice.assay.data$group + choice.assay.data$gm.init.drymass_mg)
-
-cat("original r-squared:\n")
-summary(model)$r.squared
-
-plot(choice.assay.data$lf.end.drymass_mg ~ choice.assay.data$lf.init.drymass_group.calib_mg,
-     xlab = "initial leaf drymass (mg)",
-     ylab = "final leaf drymass (mg)",
-     main = "full data"
-     )
-suppressWarnings(abline(model))
-abline(c(0,1),col = "red")
-
-## reove outliers
-choice.assay.data2 <- choice.assay.data[c(-outliers),]
-
-# nrow(choice.assay.data2)
-
-model2 <- lm(choice.assay.data2$lf.end.drymass_mg ~ choice.assay.data2$lf.init.drymass_group.calib_mg + choice.assay.data2$group + choice.assay.data2$gm.init.drymass_mg)
-
-cat("new r-squared:\n")
-summary(model2)$r.squared
-
-plot(choice.assay.data2$lf.end.drymass_mg ~ choice.assay.data2$lf.init.drymass_group.calib_mg,
-     xlab = "initial leaf drymass (mg)",
-     ylab = "final leaf drymass (mg)",
-     main = "without outlier"
-     )
-suppressWarnings(abline(model2))
-abline(c(0,1),col = "red")
-
+```{r biomass consumed by larval mass, include = FALSE}
+with(choice.assay.data,{
+  plot(bmass.consumed_group.cal ~ gm.init.drymass_mg)
+})
 ```
 
-There seems to be a strong effect of removing the potential outlier, which may justify removing the observation from the analysis.
+Before we look at potential outliers, we should standardize
+some metrics by initial larval biomass:
 
-#### No molting
+```{r standardize by initial larval mass}
+choice.assay.data <- within(choice.assay.data,{
+  rel.bmass.cons_no.cal <- bmass.consumed_no.cal/gm.init.drymass_mg
+  rel.bmass.cons_genet.cal <- bmass.consumed_genet.cal/gm.init.drymass_mg
+  rel.bmass.cons_group.cal <- bmass.consumed_group.cal/gm.init.drymass_mg
+})
+
+barplot(sort(choice.assay.data$rel.bmass.cons_group.cal), 
+        ylab = "Relative bio_mass consumed (mg/mg)",
+        xlab = "Larva Index (sorted)",
+        main = "Relative biomass consumed by GM larvae")
+```
+
+### No molting
 
 First, I want to make sure that there isn't any obvious reason for a decrease in area.
 
@@ -338,11 +332,9 @@ data.reduced$leaf.mass.consumed <- dif.red <- (data.reduced$lf.init.drymass_grou
 
 prop.red <- length(which(dif.red < 0))/length(dif.red)
 
-gen.dif.red <- (data.reduced$lf.init.drymass_genet.calib_mg - data.reduced$lf.end.drymass_mg)
+prop.genet.red <- length(which(data.reduced$bmass.consumed_genet.cal < 0))/length(data.reduced$bmass.consumed_genet.cal)
 
-prop.genet.red <- length(which(gen.dif.red < 0))/length(gen.dif.red)
-
-boxplot(dif0,dif1,dif2,dif.red,gen.dif.red,names = c("linear","genet","grouped\n linear", "no.molt\ngrouped","no.molt\n genet"),main = "Estimated Leaf Biomass Consumed \n by calibration method",ylab = "leaf biomass lost (mg)",xlab = "calibration type")
+boxplot(dif0,dif1,dif2,dif.red,data.reduced$bmass.consumed_genet.cal,names = c("linear","genet","grouped\n linear", "no.molt\ngrouped","no.molt\n genet"),main = "Estimated Leaf Biomass Consumed \n by calibration method",ylab = "leaf biomass lost (mg)",xlab = "calibration type")
 abline(h = 0, col = "grey", lty = 2)
 ```
 
@@ -353,6 +345,127 @@ round(cbind("linear" = prop0, "genet" = prop1, "grp.lin" = prop2, prop.red, prop
 ```{r prop. of molting}
 length(which(choice.assay.data$molting_bin==1))/nrow(choice.assay.data)
 ```
+
+### Check Data
+
+```{r full data plot}
+model <- lm(data = data.reduced, lf.end.drymass_mg ~ lf.init.drymass_group.calib_mg)
+
+cat("original r-squared (with group covariate):\n")
+summary(model)$r.squared
+
+plot(data.reduced$lf.end.drymass_mg ~ data.reduced$lf.init.drymass_group.calib_mg,
+     xlab = "initial leaf drymass (mg)",
+     ylab = "final leaf drymass (mg)",
+     main = "final leaf biomass by initial biomass (full data)"
+     )
+suppressWarnings(abline(model))
+abline(c(0,1),col = "red")
+
+```
+
+```{r}
+cons.model <- lm(data = data.reduced, bmass.consumed_group.cal ~ group + 
+                   genet.lf + gm.init.drymass_mg)
+
+cat("consumption model rsquared:\n")
+summary(cons.model)$r.squared
+
+anova(cons.model)
+
+with(data.reduced,{
+  boxplot(bmass.consumed_group.cal ~ group,
+       xlab = "group",
+       ylab = "biomass consumed (mg)",
+       main = "biomass consumed by group")
+  plot(bmass.consumed_group.cal ~ gm.init.drymass_mg,
+       ylab = "biomass consumed (mg)",
+       xlab = "initial GM biomass (mg)",
+       main = "biomass consumed by initial larval biomass")
+  abline(lm(bmass.consumed_group.cal ~ gm.init.drymass_mg),
+         col = "red")
+  plot(bmass.consumed_group.cal ~ genet.lf,
+       ylab = "biomass consumed (mg)",
+       xlab = "genet",
+       main = "biomass consumed by leaf genet")
+})
+```
+
+
+#### Outlier test:
+
+There appears to be an outlier in the data (biomass consumed of about 150 mg)
+
+We'll do an official outlier test here:
+
+```{r lf. cal. outlier tests}
+
+## from the 'car' package:
+outlr.test <- outlierTest(cons.model,n.max = Inf)
+
+cat("outlier test:\n")
+outlr.test
+  
+if (outlr.test$bonf.p <= outlr.test$cutoff){
+  # list of outliers (as rows of original dataset)
+  outliers <- as.numeric(names(outlr.test[[1]]))
+  
+  outliers
+  
+  out.obs <- data.reduced[outliers,]
+  
+  out.obs %>% select("genet.lf","group","lf.init.drymass_group.calib_mg","lf.end.drymass_mg","bmass.consumed_group.cal", "rel.bmass.cons_group.cal")
+  
+  # Show the biomass difference
+  outlier.val <- round(data.reduced[outliers, "lf.end.drymass_mg"],digits = 2)
+  
+  outlier.val
+  
+  rel.cons.outlier <- round(data.reduced$rel.bmass.cons_group.cal[outliers],3)
+}
+```
+
+There is no official outlier, according to the bonferoni outlier test. However,
+this value still seems unusual and may need to be removed.
+
+This anamoly is likely due to a recording error in the leaf's mass. I will test to see the effect of removing the observations:
+
+```{r outlier effect}
+out.index <- which(data.reduced$bmass.consumed_group.cal >= 120)
+
+cat("potential outlier:\n")
+data.reduced[out.index,] %>% select("genet.lf","group","bmass.consumed_group.cal", "rel.bmass.cons_group.cal")
+
+data.no.outlier <- data.reduced[-out.index,]
+
+cons.model2 <- lm(data = data.no.outlier, bmass.consumed_group.cal ~ group + 
+                   genet.lf + gm.init.drymass_mg)
+
+
+cat("new r-squared (with group covariate):\n")
+(new.rsqr <- summary(cons.model2)$r.squared)
+cat("old rsquared:\n")
+(old.rsqr <- summary(cons.model)$r.squared)
+
+anova(cons.model2)
+
+with(data.no.outlier,{
+plot(bmass.consumed_group.cal ~ gm.init.drymass_mg,
+       ylab = "biomass consumed (mg)",
+       xlab = "initial GM biomass (mg)",
+       main = "biomass consumed by initial larval biomass")
+  abline(lm(bmass.consumed_group.cal ~ gm.init.drymass_mg), 
+         col = "blue")
+  abline(lm(data = data.reduced, bmass.consumed_group.cal ~ gm.init.drymass_mg), 
+         col = "red", lty = 2)
+  
+})
+if (old.rsqr >= new.rsqr){print("removing the observation(s) does not improve the model: r-squared did not improve.")}
+```
+
+There is no strong effect of removing observation `r out.index`, in fact, r-squared
+decreases. Therefore, the value should remain for now.
+
 
 ## Visualization
 
@@ -368,6 +481,7 @@ present in one dish.
 ```{r treatment group}
 # create the empty key
 treatment.key <- data.frame("Dish.ID" = data.reduced$Dish.ID, "treatment" = NA)
+
 # loop over all dishes and extract the groups present
 for (ID in data.reduced$Dish.ID){
   trts <- unique(data.reduced$group[which(data.reduced$Dish.ID == ID)])
@@ -424,14 +538,15 @@ gp +geom_errorbar(aes(ymin = mean.consumed - sd.consumed,
 
 There is a potential outlier according to the first graph above.
 
-```{r}
+```{r potential outlier}
 potential.outlier <- which(data.reduced$leaf.mass.consumed > 100)
 
-data.reduced[potential.outlier,]
+cat("Dish.ID of potential outlier:\n")
+(dish.outlier <- as.character(data.reduced[potential.outlier,"Dish.ID"]))
 ```
 
-```{r}
-triplets.filtered <- data.reduced %>% filter(leaf.mass.consumed <= 100, treatment == "fast.med.slow")
+```{r redo the triplets without this outlier}
+triplets.filtered <- data.reduced %>% filter(! Dish.ID %in% dish.outlier, treatment == "fast.med.slow")
 
 triplets.means <- triplets.filtered %>% group_by(group) %>% 
   summarise(mean.consumed = mean(leaf.mass.consumed), sd.consumed = sd(leaf.mass.consumed))
@@ -440,6 +555,33 @@ ggplot(data = triplets.means, aes(y = mean.consumed, x = group)) +
   geom_bar(aes(fill = group), stat = "identity", position = "dodge") + 
     labs(title = "leaf biomass consumed by treatment", subtitle = "(choice of all 3)", y = "biomass consumed") +
   geom_errorbar(aes(ymin = mean.consumed - sd.consumed,
+                    ymax = mean.consumed + sd.consumed),
+                width = .2,
+                position = position_dodge(.9))
+```
+
+#### Again with relative consumption
+
+```{r plot the groups}
+
+ggplot(data = data.reduced, aes(x = jitter(as.numeric(treatment)), y = rel.bmass.cons_group.cal, fill = group)) +
+  geom_point(aes(col = group)) + labs(title = "relative consumption by treatment", y = "relative biomass consumed", x = "dish combination (jittered)")
+
+## summarize the grouped data by mean 
+plot.table <- data.reduced %>% 
+  filter(! Dish.ID %in% dish.outlier) %>% ## this step only if outlier should be removed
+  group_by(treatment, group) %>% 
+  summarize(mean.consumed = mean(rel.bmass.cons_group.cal), 
+            sd.consumed = sd(rel.bmass.cons_group.cal))
+
+
+gp <- ggplot(data = plot.table, aes(x = treatment, y = mean.consumed, fill = group)) +
+  geom_bar(stat = "identity", position = "dodge", col = "black")+
+    labs(title = "relative consumption by treatment", y = "relative biomass consumed")
+  
+  
+  
+gp +geom_errorbar(aes(ymin = mean.consumed - sd.consumed,
                     ymax = mean.consumed + sd.consumed),
                 width = .2,
                 position = position_dodge(.9))
