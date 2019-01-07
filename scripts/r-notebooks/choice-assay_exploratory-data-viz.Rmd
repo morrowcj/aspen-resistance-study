@@ -562,7 +562,7 @@ ggplot(data = triplets.means, aes(y = mean.consumed, x = group)) +
 
 #### Again with relative consumption
 
-```{r plot the groups}
+```{r plot the groups (rel consumption)}
 
 ggplot(data = data.reduced, aes(x = jitter(as.numeric(treatment)), y = rel.bmass.cons_group.cal, fill = group)) +
   geom_point(aes(col = group)) + labs(title = "relative consumption by treatment", y = "relative biomass consumed", x = "dish combination (jittered)")
