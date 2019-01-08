@@ -177,7 +177,7 @@ There seems to be a significant effect of group on water loss.
 
 There may be an outlier in the calibration data:
 
-```{r leaf cal. by group no outliers, include=TRUE}
+```{r leaf cal. by group no outliers, eval=FALSE, echo=TRUE}
 cat("outlier test:\n")
 outlierTest(leaf.calib.model)
 cal.outliers <- as.numeric(names(outlierTest(leaf.calib.model)[[1]]))
@@ -509,14 +509,14 @@ data.reduced %>% nrow()
 data.reduced[data.reduced$Dish.ID %in% data.reduced$Dish.ID[c(1,5,31,80)],] %>% select(Dish.ID, group, treatment)
 
 ## treatment composition table
-(treatment.n <- data.reduced %>% group_by(treatment) %>% summarise(n = length(Dish.ID)))
+(treatment.n <- data.reduced %>% group_by(treatment) %>% summarise("dish n" = length(unique(Dish.ID))))
 ```
 
 ### Plots
 
 Let's see how our treatments influenced consumption:
 
-```{r plot the groups}
+```{r plot the groups, include=FALSE}
 ggplot(data = data.reduced, aes(x = jitter(as.numeric(treatment)), y = leaf.mass.consumed, fill = group)) +
   geom_point(aes(col = group)) + labs(title = "leaf biomass consumed by treatment", y = "biomass consumed")
 
@@ -536,16 +536,16 @@ gp +geom_errorbar(aes(ymin = mean.consumed - sd.consumed,
                 position = position_dodge(.9))
 ```
 
-There is a potential outlier according to the first graph above.
+<!-- There is a potential outlier according to the first graph above. -->
 
-```{r potential outlier}
+```{r potential outlier, include=FALSE}
 potential.outlier <- which(data.reduced$leaf.mass.consumed > 100)
 
 cat("Dish.ID of potential outlier:\n")
 (dish.outlier <- as.character(data.reduced[potential.outlier,"Dish.ID"]))
 ```
 
-```{r redo the triplets without this outlier}
+```{r redo the triplets without this outlier, include=FALSE}
 triplets.filtered <- data.reduced %>% filter(! Dish.ID %in% dish.outlier, treatment == "fast.med.slow")
 
 triplets.means <- triplets.filtered %>% group_by(group) %>% 
@@ -577,7 +577,7 @@ plot.table <- data.reduced %>%
 
 gp <- ggplot(data = plot.table, aes(x = treatment, y = mean.consumed, fill = group)) +
   geom_bar(stat = "identity", position = "dodge", col = "black")+
-    labs(title = "relative consumption by treatment", y = "relative biomass consumed")
+    labs(title = "relative consumption by treatment",subtitle = "(minus potential outlier in fast.med.slow)", y = "relative biomass consumed")
   
   
   
@@ -585,8 +585,78 @@ gp +geom_errorbar(aes(ymin = mean.consumed - sd.consumed,
                     ymax = mean.consumed + sd.consumed),
                 width = .2,
                 position = position_dodge(.9))
+
 ```
 
+Let's test the significance of these relationships:
+
+```{r significance}
+fast.med <- data.reduced %>% 
+  filter(! Dish.ID %in% dish.outlier) %>% ## this step only if outlier should be removed
+  filter(treatment == "fast.med")
+fast.med.model <- lm(data = fast.med, rel.bmass.cons_group.cal ~ group)
+
+
+fast.slow <- data.reduced %>% 
+  filter(! Dish.ID %in% dish.outlier) %>% ## this step only if outlier should be removed
+  filter(treatment == "fast.slow")
+fast.slow.model <- lm(data = fast.slow, rel.bmass.cons_group.cal ~ group)
+
+
+med.slow <- data.reduced %>% 
+  filter(! Dish.ID %in% dish.outlier) %>% ## this step only if outlier should be removed
+  filter(treatment == "med.slow")
+med.slow.model <- lm(data = med.slow, rel.bmass.cons_group.cal ~ group)
+
+
+fast.med.slow <- data.reduced %>% 
+  filter(! Dish.ID %in% dish.outlier) %>% ## this step only if outlier should be removed
+  filter(treatment == "fast.med.slow")
+fast.med.slow.model <- lm(data = fast.med.slow, rel.bmass.cons_group.cal ~ group)
+
+fast.med.pval <- anova(fast.med.model)$`Pr(>F)`[1]
+fast.slow.pval <- anova(fast.slow.model)$`Pr(>F)`[1]
+med.slow.pval <- anova(med.slow.model)$`Pr(>F)`[1]
+fast.med.slow.pval <- anova(fast.med.slow.model)$`Pr(>F)`[1]
+
+cat("t-tests of pairs (H0 = means are equal):\n")
+p.vals <- c("fast:med" = fast.med.pval, 
+            "fast:slow" = fast.slow.pval, 
+            "med:slow" = med.slow.pval)
+sig.stars <- ifelse(p.vals <= .05, yes = "*",no = "")
+as.data.frame(rbind(round(p.vals,4),sig.stars),row.names = c("p.vals", "p < .05"))
+
+# summary(fast.med.slow.model)
+
+## test for difference of variance (pooled or not)
+leveneTest(y = fast.med.slow$rel.bmass.cons_group.cal, group = fast.med.slow$group)
+  ## the p value of .064 is borderline but I will choose to not pool the SD
+  ## because of the visual difference in the SD bars.
+
+cat("parwise t-test for the triplets:\n")
+## test for difference of mean
+trip.test <- with(fast.med.slow,{
+  pairwise.t.test(x = rel.bmass.cons_group.cal, g = group, pool.sd = FALSE)
+})  
+
+trip.test
+cat("significance of pairwise t-test:\n")
+noquote(ifelse(trip.test$p.value <= .05, yes = "*", no = "-"))
+```
+
+In conclusion (based on only significant results): 
+
+1. In a choice between fast and slow-growing genets, larvae prefered fast growers
+
+2. in a choice between moderate- and slow-growing genets, larvae prefered moderate growers
+
+3. in a choice between all 3 groups, moderate-growing genets were prefered over fast growers.
+**Note:** This is supported by the trend (non-significant) of larvae prefering moderate over fast genets in the first paired treatment.
+
+
+# Needed
+
+I still need to incoporate the elapsed feeding time (although all dishes were allowed to feed for approximately 24 hours)
 
 ```{r update data}
 write.csv(choice.assay.data,file = "data/Choice_Assay/leaf-and-larvae-data_long_calibrated.csv")
