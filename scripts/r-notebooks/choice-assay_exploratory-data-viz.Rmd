@@ -1,12 +1,12 @@
 ---
 title: "Choice Assay Exploratory Data Visualization"
 output:
-  html_notebook:
+  html_document:
     code_folding: hide
     df_print: paged
     toc: yes
     toc_float: yes
-  html_document:
+  html_notebook:
     code_folding: hide
     df_print: paged
     toc: yes
