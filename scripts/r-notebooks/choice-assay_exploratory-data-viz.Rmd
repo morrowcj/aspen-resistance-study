@@ -577,6 +577,8 @@ These preference values will be used later.
 
 # Phenotype Data
 
+This section is meant for loading and manipulating the phenotype data (i.e. physical and chemical).
+
 ## Size Data
 
 Here we will load in phenotype data from Chris' 'summary table'. We'll only
@@ -616,7 +618,8 @@ stopifnot(nrow(choice.assay.data) == full.n)
 
 This section is where we'll load in the chem data from this project. There is
 some recent chemistry data in Chris' phenotype table that we will use to make
-preliminary connections, until our chemistry analyses are completed. 
+preliminary connections, until our chemical analyses of experimental leaves
+are completed. 
 
 ```{r load in PG data}
 # load in entire data set
@@ -625,8 +628,6 @@ chem.data <- read.csv(
             "Hol18_BATCH1-6_Master_CJM_02Jan2019_reduced.csv"),
   header = TRUE
   )
-
-##--  restructure data
 
 # Fix redo flag level NA
 chem.data$redo.flag <- ifelse(is.na(chem.data$redo.flag),yes = 0,no = 1)
@@ -639,16 +640,22 @@ for (col in c("Analys.batch","std.batch","redo.flag","type.flag")) {
 # Rename the "ID" column to "Batch.ID"
 names(chem.data) <- gsub(names(chem.data),pattern = "^ID$",
                          replacement = "Batch.ID")
+```
 
+```{r reduce chem data}
 # Reduce data to only experimental samples
 chem.data <- chem.data %>% filter(type.flag == 0)
-## Chem IDs that are redos
+## identify chem IDs that are redos
 dup.IDs <- chem.data$Chem.ID[which(chem.data$redo.flag == 1)]
-## remove rows with the duplicate IDs and that are not the re-done value
-chem.data <- chem.data[-which(chem.data$Chem.ID %in% dup.IDs & chem.data$redo.flag != 1 ),]
+
 ## replace the "700 redo" SerialNo with the correct "700"
 chem.data$SerialNo <- factor(gsub(chem.data$SerialNo,pattern = "700.*",replacement = "700"))
 
+## remove rows with the duplicate IDs and that are not the re-done value
+chem.data <- chem.data[-which(chem.data$Chem.ID %in% dup.IDs & chem.data$redo.flag != 1 ),]
+```
+
+```{r summarize PG data}
 # tally the observations per serial number
 PG.n <- chem.data %>% group_by(SerialNo) %>% tally()
 
@@ -675,19 +682,18 @@ ordered.SerialNo <- factor(chem.data$SerialNo,
 
 # plot total PG data by serial number
 with(chem.data,{
-  plot(c(Scin.DW + Scort.DW + Tdin.DW +Tcin.DW) ~ ordered.SN, ylab = "Total PG %")
+  plot(c(Scin.DW + Scort.DW + Tdin.DW +Tcin.DW) ~ ordered.SerialNo, ylab = "Total PG %", main = "PG variation among trees (genets)")
 })
 
 # print a subset of the summary table
 pg.summ.table[sample(1:nrow(pg.summ.table),size = 4),]
-
-# summary(pg.summ.table)
-
 ```
 
 
-```{r merge in chem data}
+```{r merge in PG summary}
+choice.assay.data <- merge(choice.assay.data,pg.summ.table,by = "SerialNo")
 
+stopifnot(nrow(choice.assay.data) == full.n)
 ```
 
 
@@ -1128,7 +1134,7 @@ total biomass consumed by the larva, and vigor group.
 
 ## Size Relationships
 
-```{r}
+```{r plots w/tree vol}
 with(data.reduced,{
   plot(Vol.2018 ~ group, main = "Current Volume by group")
   plot(leaf.preference ~ Vol.2018)
@@ -1136,6 +1142,11 @@ with(data.reduced,{
 })
 
 
+```
+
+## Chem relationships
+
+```{r plots w/PG data,include=FALSE}
 ```
 
 
