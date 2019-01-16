@@ -655,10 +655,25 @@ chem.data <- chem.data %>% filter(type.flag == 0)
 dup.IDs <- chem.data$Chem.ID[which(chem.data$redo.flag == 1)]
 
 ## replace the "700 redo" SerialNo with the correct "700"
-chem.data$SerialNo <- factor(gsub(chem.data$SerialNo,pattern = "700.*",replacement = "700"))
+chem.data$SerialNo <- factor(gsub(chem.data$SerialNo,
+                                  pattern = "700.*",
+                                  replacement = "700"))
 
 ## remove rows with the duplicate IDs and that are not the re-done value
-chem.data <- chem.data[-which(chem.data$Chem.ID %in% dup.IDs & chem.data$redo.flag != 1 ),]
+chem.data <- chem.data[-which(chem.data$Chem.ID %in% 
+                                dup.IDs & chem.data$redo.flag != 1 ),]
+
+# Add in treatment
+chem.data$lf.treatment <- factor(
+  ifelse(as.numeric(as.character(chem.data$Chem.ID)) <= 108, 
+         yes = "pre.feeding", 
+         no = ifelse(as.numeric(chem.data$Chem.ID) <= 216, 
+                     yes = "control",
+                     no = ifelse(
+                       as.numeric(as.character(chem.data$Chem.ID)) <= 324, 
+                       yes = "experimental", 
+                       no = NA))),
+  levels = c("pre.feeding","control","experimental"))
 ```
 
 ```{r summarize PG data}
@@ -1140,23 +1155,83 @@ total biomass consumed by the larva, and vigor group.
 
 ## Size Relationships
 
-```{r plots w/tree vol}
-with(data.reduced,{
-  plot(Vol.2018 ~ group, main = "Current Volume by group")
-  plot(leaf.preference ~ Vol.2018)
-  plot(rel.bmass.cons_group.cal ~ Vol.2018)
-})
+Here, we look at the relationships of tree size in the context of our 
+experiment.
 
-
+```{r define group colors}
+## group colors for plotting (base r)
+group.colors <- ifelse(data.reduced$group == levels(data.reduced$group)[1],
+                     yes = "red",
+                     no = ifelse(data.reduced$group == 
+                                   levels(data.reduced$group)[2],
+                                 yes = "forestgreen",
+                                 no = "blue"))
+legend.colors <- c("red","forestgreen","blue")
 ```
+
+```{r plots w/tree vol}
+par(pch = 20)
+
+# Plot some important relationships: (see title/'main')
+with(data.reduced,{
+  boxplot(Vol.2018 ~ group, outline = FALSE,
+       main = "Current Volume by group")
+  
+  boxplot(GrowLn.1518 ~ group, outline = FALSE, 
+          main = "Larval leaf consumption by tree growth rate" )
+  
+  plot(Vol.2018 ~ GrowLn.1518,
+       main = "Tree Size and Relative Growth comparison", col = group.colors)
+  legend(x = "topright",legend = levels(data.reduced$group),
+         fill = legend.colors)
+  
+  plot(leaf.preference ~ Vol.2018, 
+       main = "Larval leaf preference by tree volume",
+       col = group.colors)
+  
+  plot(rel.bmass.cons_group.cal ~ Vol.2018, 
+       ylab = "relative biomass consumed (mg)",
+       main = "Larval leaf consumption by tree volume",
+       col = group.colors)
+})
+```
+
+Plot 1: As we would hope, Tree volume in 2018 coincides with our treatment 
+groups
+
+Plot 2: However, it seems that relative growth 
+($ln(\frac{size_{t}}{size_{t-1}})$) has an inverse relationship with our 
+treatment groups.
 
 ## Chem relationships
 
+```{r Leaf chem by treatment}
+for (PG in grep(names(chem.data),
+                pattern = ".DW",value = TRUE)){
+  print(paste(PG,"~ lf.treatment:"))
+  
+  boxplot(chem.data[,PG] ~ chem.data$lf.treatment,
+          outline = FALSE,
+          ylab = gsub(PG,pattern = ".DW",
+                      replacement = " Dry weight %"),
+          xlab = "leaf collection treatment")
+  
+  PG.mod <- lm(chem.data[,PG] ~ chem.data$lf.treatment)
+  # print(PG.anov[1:5])
+  print(anova(PG.mod)[1:5])
+  
+  # use tukey test (instead of pairwise t-test)
+  print(TukeyHSD(aov(PG.mod), "chem.data$lf.treatment"),digits = 4)
+}
+```
+
+.2036
 ```{r plots PGs ~ group}
 for (PG in grep(names(data.reduced),
                 pattern = ".DW.mean",value = TRUE)){
   plot(data.reduced[,PG] ~ data.reduced$group,
-       ylab = gsub(PG,pattern = ".DW.mean",replacement = " Dry weight %"))
+       ylab = gsub(PG,pattern = ".DW.mean",replacement = " Dry weight %"),
+       xlab = "group")
   
   print(paste(PG,"~ group:"))
   anov.tab <- anova(lm(data.reduced[,PG] ~ data.reduced$group))
@@ -1166,10 +1241,15 @@ for (PG in grep(names(data.reduced),
 ```
 
 ```{r pref ~ PG}
+par(pch = 20)
+
 for (PG in grep(names(data.reduced),
                 pattern = ".DW.mean",value = TRUE)){
   plot(data.reduced$leaf.preference ~ data.reduced[,PG],
-       xlab = gsub(PG,pattern = ".DW.mean",replacement = " Dry weight %"))
+       xlab = gsub(PG,pattern = ".DW.mean",replacement = " Dry weight %"),
+       ylab = "leaf.preference (entire season/all treatments)", col = group.colors)
+  legend(x = "topright",legend = levels(data.reduced$group),
+         fill = legend.colors)
   
   print(paste("leaf.preference ~",PG))
   anov.tab <- anova(lm(data.reduced$leaf.preference ~ data.reduced[,PG] + data.reduced$group))
