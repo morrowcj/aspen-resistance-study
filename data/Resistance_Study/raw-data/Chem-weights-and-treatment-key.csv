@@ -1,0 +1,326 @@
+SerialNo,MicrotubeNo/Chem.ID,Tree.ID,Treatment,PG Sample Mass (mg) [25 ± 5],CT Sample Mass (mg) [25 ± 5],C:N Sample Mass (mg) [≈ 10 mg],Notes,Redo
+2,1,1_A_2,Pre-feeding,25.8,24.1,,,
+19,2,1_A_19,Pre-feeding,22.1,22.6,,,
+34,3,1_B_6,Pre-feeding,26.6,21.2,,,
+57,4,1_C_1,Pre-feeding,24,24.3,,,
+73,5,1_C_17,Pre-feeding,24.9,23.5,,,
+119,6,1_E_7,Pre-feeding,23,20.2,,,
+127,7,1_E_15,Pre-feeding,24.3,24.1,,,
+133,8,1_E_21,Pre-feeding,24.8,24.8,,,
+141,9,1_F_1,Pre-feeding,25.6,22.5,,,
+153,10,1_F_13,Pre-feeding,23,22.2,,,
+156,11,1_F_16,Pre-feeding,20.8,21.2,,,
+159,12,1_F_19,Pre-feeding,20.9,26,,,
+172,13,1_G_4,Pre-feeding,25.9,22.3,,,
+213,14,1_H_17,Pre-feeding,21,25.2,,,
+223,15,1_H_27,Pre-feeding,28.6,25.5,,,
+226,16,1_I_2,Pre-feeding,22,23.5,,,
+234,17,1_I_10,Pre-feeding,29.2,28,,,
+238,18,1_I_14,Pre-feeding,26.2,23.2,,,
+242,19,1_I_18,Pre-feeding,23.5,22.3,,,
+244,20,1_I_20,Pre-feeding,28.5,25.1,,,
+250,21,1_I_26,Pre-feeding,22.9,25.1,,,
+282,22,1_K_2,Pre-feeding,24.1,22.1,,,
+286,23,1_K_6,Pre-feeding,25.6,26.2,,,
+293,24,1_K_13,Pre-feeding,21.2,28.1,,,
+328,25,1_L_20,Pre-feeding,23.3,28,,,
+329,26,1_L_21,Pre-feeding,28.3,24.6,,,
+334,27,1_L_26,Pre-feeding,28.1,29.5,,,
+369,28,1_N_5,Pre-feeding,21.9,20,,,
+415,29,2_A_23,Pre-feeding,24,21.8,,,
+421,30,2_B_1,Pre-feeding,27.3,26.5,,,
+441,31,2_B_21,Pre-feeding,20.2,21.7,,,
+451,32,2_C_3,Pre-feeding,28.1,21.7,,,
+466,33,2_C_18,Pre-feeding,23.8,21.8,,,
+467,34,2_C_19,Pre-feeding,25.5,21.4,,,
+473,35,2_C_25,Pre-feeding,27.5,27.2,,,
+497,36,2_D_21,Pre-feeding,26.9,22.8,,,
+512,37,2_E_8,Pre-feeding,24.9,21.1,,,
+523,38,2_E_19,Pre-feeding,24.9,20.9,,,
+526,39,2_E_22,Pre-feeding,24.8,25.3,,,
+528,40,2_E_24,Pre-feeding,21.5,21.8,,,
+529,41,2_E_25,Pre-feeding,21.7,25.2,,,
+555,42,2_F_23,Pre-feeding,23.7,20.6,,,
+570,43,2_G_10,Pre-feeding,26.5,26.1,,,
+586,44,2_G_26,Pre-feeding,23.1,28.7,,,
+602,45,2_H_14,Pre-feeding,23.9,22.4,,,
+616,46,2_H_28,Pre-feeding,25.5,23.6,,,
+617,47,2_I_1,Pre-feeding,28.7,25.5,,,
+639,48,2_I_23,Pre-feeding,20.9,27.2,,,
+647,49,2_J_3,Pre-feeding,21.4,22.2,,,
+650,50,2_J_6,Pre-feeding,21,25,,,
+671,51,2_J_27,Pre-feeding,21.1,20.7,,,
+672,52,2_J_28,Pre-feeding,28.9,26.1,,,
+683,53,2_K_11,Pre-feeding,21,20,,,
+697,54,2_K_25,Pre-feeding,24.1,26.5,,,
+700,55,2_K_28,Pre-feeding,22.9,20.2,,,
+700 redo,55R,2_K_28,Pre-feeding,29.3,27.8,,,
+715,56,2_L_15,Pre-feeding,23.6,22.1,,,
+751,57,2_M_23,Pre-feeding,23.9,25.4,,,
+783,58,2_N_27,Pre-feeding,25.6,26,,,
+803,59,3_A_19,Pre-feeding,24.1,25.2,,,
+815,60,3_B_3,Pre-feeding,22.5,24.7,,,
+819,61,3_B_7,Pre-feeding,24.6,23.8,,,
+833,62,3_B_21,Pre-feeding,24.5,22.6,,,
+835,63,3_B_23,Pre-feeding,25,26.4,,,
+858,64,3_C_18,Pre-feeding,20.4,23.5,,,
+859,65,3_C_19,Pre-feeding,21.1,21.7,,,
+872,66,3_D_4,Pre-feeding,24.4,27.8,,,
+894,67,3_D_26,Pre-feeding,22.6,21.6,,,
+902,68,3_E_6,Pre-feeding,21.5,22.1,,,
+906,69,3_E_10,Pre-feeding,21.8,26.6,,,
+930,70,3_F_6,Pre-feeding,21.2,22.1,,,
+937,71,3_F_13,Pre-feeding,28,21.5,,,
+941,72,3_F_17,Pre-feeding,22.5,21.9,,,
+950,73,3_F_26,Pre-feeding,27.3,21.9,,,
+955,74,3_G_3,Pre-feeding,25.5,22.4,,,
+959,75,3_G_7,Pre-feeding,23.4,22.9,,,
+965,76,3_G_13,Pre-feeding,23.3,20.6,,,
+1032,77,3_I_24,Pre-feeding,20.4,20.5,,,
+1053,78,3_J_17,Pre-feeding,27,24.5,,,
+1103,79,3_L_11,Pre-feeding,20.8,22.8,,,
+1114,80,3_L_22,Pre-feeding,23.9,22.5,,,
+1127,81,3_M_7,Pre-feeding,22.7,23.3,,,
+1149,82,3_N_1,Pre-feeding,28,23.1,,,
+1150,83,3_N_2,Pre-feeding,21.8,22.9,,,
+1151,84,3_N_3,Pre-feeding,28.8,20.2,,,
+1157,85,3_N_9,Pre-feeding,21,24.9,,,
+1190,86,4_A_14,Pre-feeding,27.5,22,,,
+1197,87,4_A_21,Pre-feeding,20.4,29,,,
+1211,88,4_B_7,Pre-feeding,29.5,23.4,,,
+1249,89,4_C_17,Pre-feeding,29.5,21.8,,,
+1252,90,4_C_20,Pre-feeding,24.6,28.6,,,
+1270,91,4_D_10,Pre-feeding,20.1,28.4,,,
+1273,92,4_D_13,Pre-feeding,27.9,22.7,,,
+1303,93,4_E_15,Pre-feeding,25.7,21.8,,,
+1309,94,4_E_21,Pre-feeding,28.7,24.2,,,
+1317,95,4_F_1,Pre-feeding,28.9,23.4,,,
+1321,96,4_F_5,Pre-feeding,22.2,23.7,,,
+1371,97,4_G_27,Pre-feeding,27.4,23.4,,,
+1379,98,4_H_7,Pre-feeding,25.5,28.1,,,
+1391,99,4_H_19,Pre-feeding,,,,Vial Empty ,
+1403,100,4_I_3,Pre-feeding,22.8,26.5,,,
+1419,101,4_I_19,Pre-feeding,21.3,23.6,,,
+1423,102,4_I_23,Pre-feeding,22.5,22.4,,,
+1442,103,4_J_14,as.numeric(data.reduced$group),23.8,23.2,,,
+1450,104,4_J_22,Pre-feeding,22.3,21.6,,,
+1481,105,4_K_25,Pre-feeding,20.6,23,,,
+1485,106,4_L_1,Pre-feeding,27.3,22.3,,,
+1521,107,4_M_9,Pre-feeding,30,22,,,
+1552,108,4_N_12,Pre-feeding,22.9,24.1,,,
+2,109,1_A_2,Control:Post-feeding,22.9,22,,,
+19,110,1_A_19,Control:Post-feeding,22.3,26.1,,,
+34,111,1_B_6,Control:Post-feeding,21.4,21.2,,,
+57,112,1_C_1,Control:Post-feeding,22.2,23.6,,,
+73,113,1_C_17,Control:Post-feeding,21,28,,,
+119,114,1_E_7,Control:Post-feeding,22.3,23.1,,,
+127,115,1_E_15,Control:Post-feeding,21.8,23.2,,,
+133,116,1_E_21,Control:Post-feeding,24.2,26.8,,,
+141,117,1_F_1,Control:Post-feeding,24.1,21.1,,,
+153,118,1_F_13,Control:Post-feeding,20.8,21.3,,,
+156,119,1_F_16,Control:Post-feeding,23.5,23.3,,,
+159,120,1_F_19,Control:Post-feeding,25.9,23.7,,,
+172,121,1_G_4,Control:Post-feeding,21,20,,,
+213,122,1_H_17,Control:Post-feeding,23,21.9,,,
+223,123,1_H_27,Control:Post-feeding,26.7,26.2,,,
+226,124,1_I_2,Control:Post-feeding,24,20.1,,,
+234,125,1_I_10,Control:Post-feeding,27,21.7,,,
+238,126,1_I_14,Control:Post-feeding,21.2,23.9,,,
+242,127,1_I_18,Control:Post-feeding,22.8,29.6,,,
+244,128,1_I_20,Control:Post-feeding,21.6,24.9,,,
+250,129,1_I_26,Control:Post-feeding,29.8,23.5,,,
+282,130,1_K_2,Control:Post-feeding,23,23.8,,,
+286,131,1_K_6,Control:Post-feeding,24.8,27.6,,,
+293,132,1_K_13,Control:Post-feeding,29.1,26.1,,,
+328,133,1_L_20,Control:Post-feeding,20.4,21.3,,,
+329,134,1_L_21,Control:Post-feeding,20.9,24.6,,,
+334,135,1_L_26,Control:Post-feeding,21.7,22.1,,,
+369,136,1_N_5,Control:Post-feeding,21.2,26.3,,,
+415,137,2_A_23,Control:Post-feeding,20.4,23.1,,,
+421,138,2_B_1,Control:Post-feeding,24.2,21.6,,,
+441,139,2_B_21,Control:Post-feeding,20.9,23,,,
+451,140,2_C_3,Control:Post-feeding,23.6,23.3,,,
+466,141,2_C_18,Control:Post-feeding,25.9,21.9,,,
+467,142,2_C_19,Control:Post-feeding,25.2,21.7,,,
+473,143,2_C_25,Control:Post-feeding,27.4,21,,,
+497,144,2_D_21,Control:Post-feeding,23.6,20.1,,,
+512,145,2_E_8,Control:Post-feeding,21.5,22.1,,,
+523,146,2_E_19,Control:Post-feeding,23.6,20.7,,,
+526,147,2_E_22,Control:Post-feeding,24.5,21,,,
+528,148,2_E_24,Control:Post-feeding,25.5,21.8,,,
+529,149,2_E_25,Control:Post-feeding,26.2,22.3,,,
+555,150,2_F_23,Control:Post-feeding,29,27.7,,,
+570,151,2_G_10,Control:Post-feeding,26.8,20.6,,,
+586,152,2_G_26,Control:Post-feeding,26.4,20.9,,,
+602,153,2_H_14,Control:Post-feeding,28.6,21.1,,,
+616,154,2_H_28,Control:Post-feeding,25.8,26.4,,,
+617,155,2_I_1,Control:Post-feeding,22.5,28.4,,,
+639,156,2_I_23,Control:Post-feeding,22.2,21.5,,,
+647,157,2_J_3,Control:Post-feeding,22.5,21,,,
+650,158,2_J_6,Control:Post-feeding,21.1,20.1,,,
+671,159,2_J_27,Control:Post-feeding,21,22.8,,,
+672,160,2_J_28,Control:Post-feeding,27.8,22.7,,,
+683,161,2_K_11,Control:Post-feeding,24.3,25.6,,,
+697,162,2_K_25,Control:Post-feeding,24.1,22.8,,,
+700,163,2_K_28,Control:Post-feeding,23.6,28.2,,,
+715,164,2_L_15,Control:Post-feeding,21.8,20.3,,,
+751,165,2_M_23,Control:Post-feeding,25.1,22,,,
+783,166,2_N_27,Control:Post-feeding,23.7,21.5,,,
+803,167,3_A_19,Control:Post-feeding,21.6,24.5,,,
+815,168,3_B_3,Control:Post-feeding,24.7,26.8,,,
+819,169,3_B_7,Control:Post-feeding,29.8,22.9,,,
+833,170,3_B_21,Control:Post-feeding,26.2,22.6,,,
+835,171,3_B_23,Control:Post-feeding,25,23,,,
+858,172,3_C_18,Control:Post-feeding,28.3,20.3,,,
+859,173,3_C_19,Control:Post-feeding,27.6,24.9,,,
+872,174,3_D_4,Control:Post-feeding,22,24.1,,,
+894,175,3_D_26,Control:Post-feeding,23.5,20.8,,,
+902,176,3_E_6,Control:Post-feeding,26,22.3,,,
+906,177,3_E_10,Control:Post-feeding,24.4,20.5,,,
+930,178,3_F_6,Control:Post-feeding,25.2,29.8,,,
+937,179,3_F_13,Control:Post-feeding,27.6,26,,,
+941,180,3_F_17,Control:Post-feeding,24.5,21.8,,,
+950,181,3_F_26,Control:Post-feeding,29.8,27.4,,,
+955,182,3_G_3,Control:Post-feeding,21.7,26.1,,,
+959,183,3_G_7,Control:Post-feeding,23.5,24.9,,,
+965,184,3_G_13,Control:Post-feeding,26.1,24,,,
+1032,185,3_I_24,Control:Post-feeding,26.1,22.9,,,
+1053,186,3_J_17,Control:Post-feeding,23.3,21.2,,,
+1103,187,3_L_11,Control:Post-feeding,22.7,25.1,,,
+1114,188,3_L_22,Control:Post-feeding,25.3,20.9,,,
+1127,189,3_M_7,Control:Post-feeding,23.9,27,,,
+1149,190,3_N_1,Control:Post-feeding,20.9,23.3,,,
+1150,191,3_N_2,Control:Post-feeding,21.9,22.1,,,
+1151,192,3_N_3,Control:Post-feeding,27.4,26.3,,,
+1157,193,3_N_9,Control:Post-feeding,26.9,26.4,,,
+1190,194,4_A_14,Control:Post-feeding,23.7,23.6,,,
+1197,195,4_A_21,Control:Post-feeding,27.1,24.5,,,
+1211,196,4_B_7,Control:Post-feeding,24.2,24.4,,,
+1249,197,4_C_17,Control:Post-feeding,25,23.5,,,
+1252,198,4_C_20,Control:Post-feeding,28.9,29.4,,,
+1270,199,4_D_10,Control:Post-feeding,27.9,22.5,,,
+1273,200,4_D_13,Control:Post-feeding,24.6,22,,,
+1303,201,4_E_15,Control:Post-feeding,23.3,26.4,,,
+1309,202,4_E_21,Control:Post-feeding,29.6,28.1,,,
+1317,203,4_F_1,Control:Post-feeding,23.5,20.9,,,
+1321,204,4_F_5,Control:Post-feeding,20.7,23.9,,,
+1371,205,4_G_27,Control:Post-feeding,28.3,20.2,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1379,206,4_H_7,Control:Post-feeding,27.5,25.2,,,
+1391,207,4_H_19,Control:Post-feeding,,,,empty vial,
+1403,208,4_I_3,Control:Post-feeding,25.4,20.4,,,
+1419,209,4_I_19,Control:Post-feeding,28,24.4,,,
+1423,210,4_I_23,Control:Post-feeding,21,29.5,,,
+1442,211,4_J_14,Control:Post-feeding,22.4,20.6,,,
+1450,212,4_J_22,Control:Post-feeding,28.8,21.2,,,
+1481,213,4_K_25,Control:Post-feeding,27.1,22.4,,,
+1485,214,4_L_1,Control:Post-feeding,20,27.5,,,
+1521,215,4_M_9,Control:Post-feeding,21.9,22.3,,,
+1552,216,4_N_12,Control:Post-feeding,22.1,23.1,,,
+2,217,1_A_2,Experimental:Post-feeding,26.4,23.6,,,
+19,218,1_A_19,Experimental:Post-feeding,24.1,20.3,,,
+34,219,1_B_6,Experimental:Post-feeding,27.8,24.8,,,
+57,220,1_C_1,Experimental:Post-feeding,28.3,27.4,,,
+73,221,1_C_17,Experimental:Post-feeding,23.4,24.1,,,
+119,222,1_E_7,Experimental:Post-feeding,20.2,22.6,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+127,223,1_E_15,Experimental:Post-feeding,20.6,27.9,,,
+133,224,1_E_21,Experimental:Post-feeding,26.8,22.2,,,
+141,225,1_F_1,Experimental:Post-feeding,29.1,25.8,,,
+153,226,1_F_13,Experimental:Post-feeding,20.2,25.7,,,
+156,227,1_F_16,Experimental:Post-feeding,20.5,25.7,,,
+159,228,1_F_19,Experimental:Post-feeding,25.2,24.9,,,
+172,229,1_G_4,Experimental:Post-feeding,27,29.3,,,
+213,230,1_H_17,Experimental:Post-feeding,23,22.3,,,
+223,231,1_H_27,Experimental:Post-feeding,26.8,26.5,,,
+226,232,1_I_2,Experimental:Post-feeding,21.5,27.8,,,
+234,233,1_I_10,Experimental:Post-feeding,28.8,26.1,,,
+238,234,1_I_14,Experimental:Post-feeding,21.6,24.2,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+242,235,1_I_18,Experimental:Post-feeding,25.8,26.8,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+244,236,1_I_20,Experimental:Post-feeding,20.9,21.2,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+250,237,1_I_26,Experimental:Post-feeding,25.1,24.7,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+282,238,1_K_2,Experimental:Post-feeding,21.6,25,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+286,239,1_K_6,Experimental:Post-feeding,29.4,22.9,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+293,240,1_K_13,Experimental:Post-feeding,28.7,25.8,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+328,241,1_L_20,Experimental:Post-feeding,23.6,20.5,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+329,242,1_L_21,Experimental:Post-feeding,21.9,24.6,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+334,243,1_L_26,Experimental:Post-feeding,25.7,26,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+369,244,1_N_5,Experimental:Post-feeding,25.1,28.8,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+415,245,2_A_23,Experimental:Post-feeding,26.6,28.3,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+421,246,2_B_1,Experimental:Post-feeding,26.2,22.4,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+441,247,2_B_21,Experimental:Post-feeding,26.7,28.2,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+451,248,2_C_3,Experimental:Post-feeding,22.5,23.8,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+466,249,2_C_18,Experimental:Post-feeding,23.2,28.3,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+467,250,2_C_19,Experimental:Post-feeding,26.7,20,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+473,251,2_C_25,Experimental:Post-feeding,20.3,20.5,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+497,252,2_D_21,Experimental:Post-feeding,26.9,29,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+512,253,2_E_8,Experimental:Post-feeding,23.7,25.1,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+523,254,2_E_19,Experimental:Post-feeding,28.1,27.2,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+526,255,2_E_22,Experimental:Post-feeding,29,29,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+528,256,2_E_24,Experimental:Post-feeding,21,20.6,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+529,257,2_E_25,Experimental:Post-feeding,28.1,22.5,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+555,258,2_F_23,Experimental:Post-feeding,26,27,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+570,259,2_G_10,Experimental:Post-feeding,27.5,24.1,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+586,260,2_G_26,Experimental:Post-feeding,21.9,28.6,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+602,261,2_H_14,Experimental:Post-feeding,23.6,20.8,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+616,262,2_H_28,Experimental:Post-feeding,25.9,27.3,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+617,263,2_I_1,Experimental:Post-feeding,27.8,25.8,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+639,264,2_I_23,Experimental:Post-feeding,25.1,21.9,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+647,265,2_J_3,Experimental:Post-feeding,26.7,23.9,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+650,266,2_J_6,Experimental:Post-feeding,20.4,22.6,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+671,267,2_J_27,Experimental:Post-feeding,22.2,20.4,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+672,268,2_J_28,Experimental:Post-feeding,28.3,20.2,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+683,269,2_K_11,Experimental:Post-feeding,25.6,22.6,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+697,270,2_K_25,Experimental:Post-feeding,24.9,23,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+700,271,2_K_28,Experimental:Post-feeding,29.6,22.9,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+715,272,2_L_15,Experimental:Post-feeding,23.6,23.6,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+751,273,2_M_23,Experimental:Post-feeding,29.3,22.6,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+783,274,2_N_27,Experimental:Post-feeding,21.1,27.4,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+803,275,3_A_19,Experimental:Post-feeding,20.6,27.1,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+815,276,3_B_3,Experimental:Post-feeding,21.1,25.1,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+819,277,3_B_7,Experimental:Post-feeding,26.1,26.1,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+833,278,3_B_21,Experimental:Post-feeding,28.6,24.5,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+835,279,3_B_23,Experimental:Post-feeding,21,24.9,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+858,280,3_C_18,Experimental:Post-feeding,27.8,28.3,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+859,281,3_C_19,Experimental:Post-feeding,24.6,27.9,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+872,282,3_D_4,Experimental:Post-feeding,21.8,24.1,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+894,283,3_D_26,Experimental:Post-feeding,22.2,28.8,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+902,284,3_E_6,Experimental:Post-feeding,20.5,22.2,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+906,285,3_E_10,Experimental:Post-feeding,25,21.1,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+930,286,3_F_6,Experimental:Post-feeding,28.6,25.6,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+937,287,3_F_13,Experimental:Post-feeding,21.6,23.1,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+941,288,3_F_17,Experimental:Post-feeding,20.6,25.1,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+950,289,3_F_26,Experimental:Post-feeding,26.7,26.9,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+955,290,3_G_3,Experimental:Post-feeding,29,24.5,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+959,291,3_G_7,Experimental:Post-feeding,23.7,28.6,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+965,292,3_G_13,Experimental:Post-feeding,25.5,24.9,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1032,293,3_I_24,Experimental:Post-feeding,27.5,24.9,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1053,294,3_J_17,Experimental:Post-feeding,29.5,22.4,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1103,295,3_L_11,Experimental:Post-feeding,21.6,27.2,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1114,296,3_L_22,Experimental:Post-feeding,26.2,29.5,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1127,297,3_M_7,Experimental:Post-feeding,22,25.5,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1149,298,3_N_1,Experimental:Post-feeding,28.5,24.5,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1150,299,3_N_2,Experimental:Post-feeding,25.4,24.1,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1151,300,3_N_3,Experimental:Post-feeding,27.9,23,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1157,301,3_N_9,Experimental:Post-feeding,23.7,21,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1190,302,4_A_14,Experimental:Post-feeding,27.6,26.3,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1197,303,4_A_21,Experimental:Post-feeding,25.5,28.4,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1211,304,4_B_7,Experimental:Post-feeding,27.6,27.4,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1249,305,4_C_17,Experimental:Post-feeding,29.9,23,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1252,306,4_C_20,Experimental:Post-feeding,28.3,25.5,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1270,307,4_D_10,Experimental:Post-feeding,22.2,24.4,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1273,308,4_D_13,Experimental:Post-feeding,23.4,21.9,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1303,309,4_E_15,Experimental:Post-feeding,21.2,28,,,"Redo for PGs. Batch HS-5 had highly variable Int. Std. areas and inconsistent control %PG concentrations. Redo as batch HS-5B and label vials as ""XXXB"""
+1309,310,4_E_21,Experimental:Post-feeding,26.9,25.4,,,
+1317,311,4_F_1,Experimental:Post-feeding,22.9,27.9,,,
+1321,312,4_F_5,Experimental:Post-feeding,25.3,25,,,
+1371,313,4_G_27,Experimental:Post-feeding,29,27.2,,,
+1379,314,4_H_7,Experimental:Post-feeding,25.8,24.5,,,
+1391,315,4_H_19,Experimental:Post-feeding,,,,empty vial,
+1403,316,4_I_3,Experimental:Post-feeding,20.9,20.2,,,
+1419,317,4_I_19,Experimental:Post-feeding,20.6,24.4,,,
+1423,318,4_I_23,Experimental:Post-feeding,25.5,29.8,,,
+1442,319,4_J_14,Experimental:Post-feeding,26.1,26.7,,,
+1450,320,4_J_22,Experimental:Post-feeding,22.7,24.6,,,
+1481,321,4_K_25,Experimental:Post-feeding,21.2,21.7,,,
+1485,322,4_L_1,Experimental:Post-feeding,24.5,23.8,,,
+1521,323,4_M_9,Experimental:Post-feeding,23.8,27.1,,,
+1552,324,4_N_12,Experimental:Post-feeding,26.9,20.6,,,
