@@ -640,6 +640,12 @@ for (col in c("Analys.batch","std.batch","redo.flag","type.flag")) {
 # Rename the "ID" column to "Batch.ID"
 names(chem.data) <- gsub(names(chem.data),pattern = "^ID$",
                          replacement = "Batch.ID")
+
+# Add a column for total PGs.DW (sum of PG dry weight pct.)
+chem.data$PGsum.DW <- (chem.data$Scin.DW +
+                         chem.data$Scort.DW +
+                         chem.data$Tcin.DW +
+                         chem.data$Tdin.DW)
 ```
 
 ```{r reduce chem data}
@@ -682,7 +688,7 @@ ordered.SerialNo <- factor(chem.data$SerialNo,
 
 # plot total PG data by serial number
 with(chem.data,{
-  plot(c(Scin.DW + Scort.DW + Tdin.DW +Tcin.DW) ~ ordered.SerialNo, ylab = "Total PG %", main = "PG variation among trees (genets)")
+  plot(PGsum.DW ~ ordered.SerialNo, ylab = "Total PG %", main = "PG variation among trees (genets)")
 })
 
 # print a subset of the summary table
@@ -1146,7 +1152,29 @@ with(data.reduced,{
 
 ## Chem relationships
 
-```{r plots w/PG data,include=FALSE}
+```{r plots PGs ~ group}
+for (PG in grep(names(data.reduced),
+                pattern = ".DW.mean",value = TRUE)){
+  plot(data.reduced[,PG] ~ data.reduced$group,
+       ylab = gsub(PG,pattern = ".DW.mean",replacement = " Dry weight %"))
+  
+  print(paste(PG,"~ group:"))
+  anov.tab <- anova(lm(data.reduced[,PG] ~ data.reduced$group))
+  print(anov.tab[,1:5])
+}
+
+```
+
+```{r pref ~ PG}
+for (PG in grep(names(data.reduced),
+                pattern = ".DW.mean",value = TRUE)){
+  plot(data.reduced$leaf.preference ~ data.reduced[,PG],
+       xlab = gsub(PG,pattern = ".DW.mean",replacement = " Dry weight %"))
+  
+  print(paste("leaf.preference ~",PG))
+  anov.tab <- anova(lm(data.reduced$leaf.preference ~ data.reduced[,PG] + data.reduced$group))
+  print(anov.tab[,1:5])
+}
 ```
 
 
