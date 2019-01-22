@@ -26,3 +26,5 @@
 ## quanlynx files
 *.qld
 
+## windows lock files
+.~lock*
