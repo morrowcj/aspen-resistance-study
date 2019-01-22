@@ -28,3 +28,7 @@
 
 ## windows lock files
 .~lock*
+
+
+## test directory with lftp copied files
+test-dir
