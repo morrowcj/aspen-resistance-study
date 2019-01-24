@@ -24,12 +24,12 @@ created each non-text section.
 
 # Setup
 
-This section contains code for the initial setup such as loading libraries and
+This section contains code for the initial setup such as loading packages and
 importing the data. Therefore, this section can be skipped in most cases.
 
 All code is executed from the project root directory.
 
-```{r knitr setup, include = FALSE}
+```{r setup, include = FALSE}
 # # Set the working directory for knitr
 # knitr::opts_knit$set(root.dir = normalizePath("../../"))  # sets knitr's
 #   ## working directory to the project root directory.
