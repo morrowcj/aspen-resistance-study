@@ -1277,15 +1277,27 @@ data.reduced <- data.reduced %>% select(-c(slope,r.sqr,intcpt,ordered.levels,
                            lf.init.drymass_no.calib_mg,
                            lf.init.drymass_genet.calib_mg,
                            rel.bmass.cons_genet.cal,rel.bmass.cons_genet.cal,
-                           start.time_2400,end.time_2400),phenotype.cols) %>%
+                           start.time_2400,end.time_2400,phenotype.cols)) %>%
   ## copy the drymass estimate into the original column
   mutate(lf.init.drymass_mg = lf.init.drymass_group.calib_mg)
 
+# write the file
 write.csv(data.reduced,file = "data/Choice_Assay/leaf-and-larvae-data_long_calibrated-&-reduced.csv")
 ```
 
 
 ```{r write full data}
+# remove uneccessary columns
+choice.assay.data <- choice.assay.data %>% select(-c(slope,r.sqr,intcpt,ordered.levels,
+                           bmass.consumed_no.cal,bmass.consumed_genet.cal,
+                           lf.init.drymass_no.calib_mg,
+                           lf.init.drymass_genet.calib_mg,
+                           rel.bmass.cons_genet.cal,rel.bmass.cons_genet.cal,
+                           start.time_2400,end.time_2400,phenotype.cols)) %>%
+  ## copy the drymass estimate into the original column
+  mutate(lf.init.drymass_mg = lf.init.drymass_group.calib_mg) %>% names()
+
+# write the file
 write.csv(choice.assay.data,
           file = "data/Choice_Assay/leaf-and-larvae-data_long_calibrated.csv")
 ```
