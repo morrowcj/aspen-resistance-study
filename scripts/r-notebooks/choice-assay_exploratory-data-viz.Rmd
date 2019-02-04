@@ -593,7 +593,7 @@ phenotype.data <- read.csv(file.path('data/WisAsp_Phenotype_Data/WisAsp Summary 
 ## Define the columns to keep
 phenotype.cols <- c("SerialNo","Genet.Compound",
                     sort(grep(names(phenotype.data),
-                         pattern = "Vol.*|BBreak.*|EFN.*|.*J2017|SexMkr.*|GrowLn.*",
+                         pattern = "Vol.*|BBreak.*|EFN.*|.*J2017|Sex.Genet|GrowLn.*",
                          value = TRUE))
                     )
 ## Reduce the phenotype data by columns and rows
