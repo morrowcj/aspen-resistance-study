@@ -972,7 +972,7 @@ Let's test the significance of these relationships:
 # Full model
 full.model <- lm(data = data.reduced, rel.bmass.cons_group.cal ~
                    group:treatment + # group within treatment
-                   genet.lf + elapsed.time_hours + dish.bmass.consumed
+                   genet.lf + elapsed.time_hours
                    )
 
 # full model call
